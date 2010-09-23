@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd>
+    <useProjectRuleSet>true</useProjectRuleSet>
+    <ruleSetFile>/Users/rodrigo/Documents/UPE/Cadeiras/2010.2/PFC/workspace/dosa/.ruleset</ruleSetFile>
+    <includeDerivedFiles>false</includeDerivedFiles>
+    <violationsAsErrors>true</violationsAsErrors>
+</pmd>
