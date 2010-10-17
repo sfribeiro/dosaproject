@@ -67,13 +67,6 @@
             <scope>system</scope>
         </dependency>
         <dependency>
-            <groupId>ChartDirector</groupId>
-            <artifactId>ChartDirector</artifactId>
-            <version>5.0.2</version>
-            <systemPath>${basedir}/src/main/resources/lib/ChartDirector.jar</systemPath>
-            <scope>system</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jfreechart</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>

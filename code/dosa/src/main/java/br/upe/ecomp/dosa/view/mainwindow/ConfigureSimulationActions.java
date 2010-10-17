@@ -27,17 +27,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-import br.upe.ecomp.dosa.controller.chart.ChartRecorder;
 import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.core.Runner;
-import br.upe.ecomp.doss.recorder.IRecorder;
+import br.upe.ecomp.doss.core.RunnerListener;
 
 /**
  * 
  * @author Rodrigo Castro
  */
-public class ConfigureSimulationActions extends ConfigureSimulation {
+public class ConfigureSimulationActions extends ConfigureSimulation implements RunnerListener {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,30 +51,53 @@ public class ConfigureSimulationActions extends ConfigureSimulation {
      * @param parent the Frame from which the dialog is displayed.
      * @param algorithm {@link Algorithm} that will be simulated.
      */
-    public ConfigureSimulationActions(Frame parent, String filePath, String fileName) {
+    public ConfigureSimulationActions(Frame parent, Algorithm algorithm, String filePath, String fileName) {
         super(parent, true);
 
         this.filePath = filePath;
         this.fileName = fileName;
 
+        initNumberSimulationsSpinner(algorithm);
+    }
+
+    private void initNumberSimulationsSpinner(Algorithm algorithm) {
         numberSimulationsSpinner.setModel(new SpinnerNumberModel(1, 1, 999, 1));
-        realtimeSimulationCheckBox.setEnabled(false);
+        boolean enabled = false;
+
+        if (algorithm.getProblem().getDimensionsNumber() < 4) {
+            enabled = true;
+            numberSimulationsSpinner.addChangeListener(new ChangeListener() {
+                private int simulations;
+
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    simulations = (Integer) numberSimulationsSpinner.getModel().getValue();
+                    realtimeSimulationCheckBox.setEnabled(simulations == 1);
+                }
+            });
+        }
+
+        realtimeSimulationCheckBox.setEnabled(enabled);
     }
 
     @Override
     protected void startButtonActionPerformed(ActionEvent evt) {
-        change();
         final int simulationsNumber = (Integer) numberSimulationsSpinner.getModel().getValue();
+        final boolean showSimulation = realtimeSimulationCheckBox.isSelected();
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                IRecorder recorder = new ChartRecorder();
-                Runner runner = new Runner(filePath, fileName, simulationsNumber, recorder);
-                // new ChartView().runChart((ChartRecorder) recorder);
-                runner.run();
-            }
-        });
-        // closeDialog();
+        Runner runner = new Runner(filePath, fileName, simulationsNumber, showSimulation);
+        if (!showSimulation) {
+            runner.addLitener(this);
+        }
+        Thread thread = new Thread(runner);
+        thread.start();
+
+        if (!showSimulation) {
+            change();
+        } else {
+            closeDialog();
+        }
+
     }
 
     private void change() {
@@ -89,5 +113,12 @@ public class ConfigureSimulationActions extends ConfigureSimulation {
 
     private void closeDialog() {
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void onSimulationFinish() {
+        closeDialog();
     }
 }
