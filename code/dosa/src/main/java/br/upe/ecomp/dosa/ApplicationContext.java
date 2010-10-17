@@ -26,12 +26,13 @@ import java.util.List;
 
 import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.algorithm.pso.GlobalBestPSO;
-import br.upe.ecomp.doss.measurement.IMeasurement;
+import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.measurement.Measurement1;
 import br.upe.ecomp.doss.problem.Problem;
 import br.upe.ecomp.doss.problem.Problem1;
-import br.upe.ecomp.doss.stopCondition.IStopCondition;
+import br.upe.ecomp.doss.problem.RandomPeaksProblem;
 import br.upe.ecomp.doss.stopCondition.MaximumIterationsStopCondition;
+import br.upe.ecomp.doss.stopCondition.StopCondition;
 import br.upe.ecomp.doss.stopCondition.StopCondition1;
 
 /**
@@ -44,8 +45,8 @@ public final class ApplicationContext {
     private static ApplicationContext applicationContext;
     private List<Class<? extends Algorithm>> algorithmList;
     private List<Class<? extends Problem>> problemList;
-    private List<Class<? extends IStopCondition>> stopConditionList;
-    private List<Class<? extends IMeasurement>> measurementList;
+    private List<Class<? extends StopCondition>> stopConditionList;
+    private List<Class<? extends Measurement>> measurementList;
 
     /**
      * Default constructor.
@@ -53,14 +54,15 @@ public final class ApplicationContext {
     private ApplicationContext() {
         algorithmList = new ArrayList<Class<? extends Algorithm>>();
         problemList = new ArrayList<Class<? extends Problem>>();
-        stopConditionList = new ArrayList<Class<? extends IStopCondition>>();
-        measurementList = new ArrayList<Class<? extends IMeasurement>>();
+        stopConditionList = new ArrayList<Class<? extends StopCondition>>();
+        measurementList = new ArrayList<Class<? extends Measurement>>();
 
         /* Algorithms */
         addAlgorithm(GlobalBestPSO.class);
 
         /* Problems */
         addProblem(Problem1.class);
+        addProblem(RandomPeaksProblem.class);
 
         /* Stop Conditions */
         addStopCondition(MaximumIterationsStopCondition.class);
@@ -103,9 +105,9 @@ public final class ApplicationContext {
     /**
      * Adds a new stop condition.
      * 
-     * @param stopCondition An instance of {@link IStopCondition}
+     * @param stopCondition An instance of {@link StopCondition}
      */
-    public void addStopCondition(Class<? extends IStopCondition> stopCondition) {
+    public void addStopCondition(Class<? extends StopCondition> stopCondition) {
         stopConditionList.add(stopCondition);
     }
 
@@ -114,7 +116,7 @@ public final class ApplicationContext {
      * 
      * @param measurement An instance of {@link Measurement}.
      */
-    public void addMeasurement(Class<? extends IMeasurement> measurement) {
+    public void addMeasurement(Class<? extends Measurement> measurement) {
         measurementList.add(measurement);
     }
 
@@ -141,7 +143,7 @@ public final class ApplicationContext {
      * 
      * @return The list of stop conditions registered in the application.
      */
-    public List<Class<? extends IStopCondition>> getStopConditionList() {
+    public List<Class<? extends StopCondition>> getStopConditionList() {
         return stopConditionList;
     }
 
@@ -150,7 +152,7 @@ public final class ApplicationContext {
      * 
      * @return The list of measurements registered in the application.
      */
-    public List<Class<? extends IMeasurement>> getMeasurementList() {
+    public List<Class<? extends Measurement>> getMeasurementList() {
         return measurementList;
     }
 }

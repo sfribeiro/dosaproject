@@ -21,12 +21,19 @@
  */
 package br.upe.ecomp.dosa.view.mainwindow;
 
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -38,6 +45,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 
+import org.apache.commons.lang.StringUtils;
+
+import br.upe.ecomp.dosa.controller.chart.FileBoxplotFileManager;
+import br.upe.ecomp.dosa.controller.chart.FileResultsAnalyser;
+import br.upe.ecomp.dosa.controller.chart.IChartManager;
+import br.upe.ecomp.dosa.controller.chart.IResultsAnalyzer;
 import br.upe.ecomp.dosa.view.mainwindow.table.ExtendedTableModel;
 import br.upe.ecomp.dosa.view.mainwindow.tree.ExtendedTreeNode;
 import br.upe.ecomp.dosa.view.mainwindow.tree.TreeNodeTypeEnum;
@@ -45,11 +58,10 @@ import br.upe.ecomp.dosa.view.wizard.WizardAction;
 import br.upe.ecomp.dosa.view.wizard.WizardListener;
 import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.core.Configurable;
-import br.upe.ecomp.doss.core.Runner;
 import br.upe.ecomp.doss.core.parser.AlgorithmXMLParser;
-import br.upe.ecomp.doss.measurement.IMeasurement;
+import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.recorder.FileRecorder;
-import br.upe.ecomp.doss.stopCondition.IStopCondition;
+import br.upe.ecomp.doss.stopCondition.StopCondition;
 
 /**
  * Add all the actions to the Main application window.
@@ -61,6 +73,10 @@ public class MainWindowActions extends MainWindow implements WizardListener {
     private String filePath;
     private String fileName;
     private Algorithm algorithm;
+    private List<File> resultFiles;
+    private IResultsAnalyzer resultsAnalyzer;
+    private IChartManager chartManager;
+    private List<String> measurementsResultList;
 
     private JPopupMenu popupAlgorithm;
     private JPopupMenu popupProblem;
@@ -76,6 +92,8 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
         createPopupMenus();
         updateToolBarButtonsState();
+
+        initResultsTab();
 
         tree.setModel(new DefaultTreeModel(null));
         table.setModel(new DefaultTableModel());
@@ -130,7 +148,59 @@ public class MainWindowActions extends MainWindow implements WizardListener {
     @Override
     protected void startSimulationToolBarButtonActionPerformed(java.awt.event.ActionEvent evt) {
         algorithm.setRecorder(new FileRecorder());
-        new Runner().runAlgorithm(algorithm);
+        ConfigureSimulation configureSimulation = new ConfigureSimulationActions(this, filePath, fileName);
+        configureSimulation.setVisible(true);
+    }
+
+    @Override
+    protected void resultDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        JFileChooser directoryOpen = new JFileChooser();
+        directoryOpen.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        int ret = directoryOpen.showDialog(this, "Open directory");
+
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            File directory = directoryOpen.getSelectedFile();
+            resultDirectoryTextField.setText(directory.getPath());
+            resultFiles = getFilesOnDirectory(directory);
+
+            updateMeasurementResultComboBox();
+        }
+    }
+
+    @Override
+    protected void createChartResultButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        String measurement = (String) measurementResultComboBox.getSelectedItem();
+        Integer step = Integer.parseInt(stepResultTextField.getText());
+        boolean logarithmicYAxis = logarithmicResultCheckBox.isSelected();
+
+        Panel panel = chartManager.plot(resultFiles, measurement, step, logarithmicYAxis);
+        resultsSplitPane.setRightComponent(panel);
+    }
+
+    private void initResultsTab() {
+        resultsAnalyzer = new FileResultsAnalyser();
+        chartManager = new FileBoxplotFileManager();
+
+        measurementResultComboBox.setEnabled(false);
+        createChartResultButton.setEnabled(false);
+
+        stepResultTextField.addKeyListener(new TextFieldKeyListener());
+    }
+
+    private void updateMeasurementResultComboBox() {
+        measurementsResultList = resultsAnalyzer.searchCommonsMeasurements(resultFiles);
+        measurementResultComboBox.setModel(new DefaultComboBoxModel(measurementsResultList
+                .toArray(new String[measurementsResultList.size()])));
+        measurementResultComboBox.setEnabled(true);
+    }
+
+    private List<File> getFilesOnDirectory(File directory) {
+        List<File> files = new ArrayList<File>();
+        for (File file : directory.listFiles()) {
+            files.add(file);
+        }
+        return files;
     }
 
     private void createPopupMenus() {
@@ -170,7 +240,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                IStopCondition stopCondition = (IStopCondition) ((ExtendedTreeNode) tree.getLastSelectedPathComponent())
+                StopCondition stopCondition = (StopCondition) ((ExtendedTreeNode) tree.getLastSelectedPathComponent())
                         .getUserObject();
                 algorithm.getStopConditions().remove(stopCondition);
                 createNodes();
@@ -193,7 +263,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                IMeasurement measurement = (IMeasurement) ((ExtendedTreeNode) tree.getLastSelectedPathComponent())
+                Measurement measurement = (Measurement) ((ExtendedTreeNode) tree.getLastSelectedPathComponent())
                         .getUserObject();
                 algorithm.getMeasurements().remove(measurement);
                 createNodes();
@@ -293,7 +363,8 @@ public class MainWindowActions extends MainWindow implements WizardListener {
     private void createNodes() {
         DefaultMutableTreeNode root = new ExtendedTreeNode(algorithm, TreeNodeTypeEnum.ALGORITHM);
         DefaultMutableTreeNode problemNode = new ExtendedTreeNode("Problem", TreeNodeTypeEnum.PROBLEM);
-        DefaultMutableTreeNode stopConditionNode = new ExtendedTreeNode("Stop conditions", TreeNodeTypeEnum.STOP_CONDITION);
+        DefaultMutableTreeNode stopConditionNode = new ExtendedTreeNode("Stop conditions",
+                TreeNodeTypeEnum.STOP_CONDITION);
         DefaultMutableTreeNode meassurementNode = new ExtendedTreeNode("Meassurements", TreeNodeTypeEnum.MEASSUREMENT);
 
         addProblem(problemNode, algorithm);
@@ -314,7 +385,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
     private void addStopCondition(DefaultMutableTreeNode stopConditionNode, Algorithm algorithm) {
         DefaultMutableTreeNode stopConditionChild;
-        for (IStopCondition stopCondition : algorithm.getStopConditions()) {
+        for (StopCondition stopCondition : algorithm.getStopConditions()) {
             stopConditionChild = new ExtendedTreeNode(stopCondition, TreeNodeTypeEnum.STOP_CONDITION_CHILD);
             stopConditionNode.add(stopConditionChild);
         }
@@ -322,7 +393,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
     private void addMeasurement(DefaultMutableTreeNode meassurementNode, Algorithm algorithm) {
         DefaultMutableTreeNode measurementChild;
-        for (IMeasurement measurement : algorithm.getMeasurements()) {
+        for (Measurement measurement : algorithm.getMeasurements()) {
             measurementChild = new ExtendedTreeNode(measurement, TreeNodeTypeEnum.MEASSUREMENT_CHILD);
             meassurementNode.add(measurementChild);
         }
@@ -348,6 +419,27 @@ public class MainWindowActions extends MainWindow implements WizardListener {
             data[i][0] = parameterName;
             data[i][1] = configurable.getParameterByName(parameterName);
             i++;
+        }
+    }
+
+    /**
+     * Listener for the Step TextFields.
+     */
+    private final class TextFieldKeyListener implements KeyListener {
+        private boolean isFinishEnabled;
+
+        public void keyTyped(final KeyEvent key) {
+            isFinishEnabled = !StringUtils.isBlank(stepResultTextField.getText()) && resultFiles != null
+                    && measurementResultComboBox.getSelectedItem() != null;
+            createChartResultButton.setEnabled(isFinishEnabled);
+        }
+
+        public void keyReleased(final KeyEvent key) {
+            // Do nothing here.
+        }
+
+        public void keyPressed(final KeyEvent key) {
+            // Do nothing here.
         }
     }
 }

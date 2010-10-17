@@ -44,9 +44,9 @@ import org.apache.commons.lang.StringUtils;
 import br.upe.ecomp.dosa.ApplicationContext;
 import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.core.parser.AlgorithmXMLParser;
-import br.upe.ecomp.doss.measurement.IMeasurement;
+import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.problem.Problem;
-import br.upe.ecomp.doss.stopCondition.IStopCondition;
+import br.upe.ecomp.doss.stopCondition.StopCondition;
 
 /**
  * Wizard to help user to configure an {@link Algorithm}.
@@ -101,14 +101,14 @@ public class WizardAction extends Wizard {
         fileNameTextField.setText("");
         fileLocationTextField.setText("");
 
-        fileNameTextField.addKeyListener(new TextFieldActionListener());
-        fileLocationTextField.addKeyListener(new TextFieldActionListener());
+        fileNameTextField.addKeyListener(new TextFieldKeyListener());
+        fileLocationTextField.addKeyListener(new TextFieldKeyListener());
     }
 
     /**
      * Listener for the Name and Path TextFields.
      */
-    private final class TextFieldActionListener implements KeyListener {
+    private final class TextFieldKeyListener implements KeyListener {
         private boolean isFinishEnabled;
 
         public void keyTyped(final KeyEvent key) {
@@ -224,7 +224,7 @@ public class WizardAction extends Wizard {
 
     private void addStopConditions() {
         stopConditionAvailableList.setModel(new DefaultListModel());
-        for (Class<? extends IStopCondition> stopCondition : applicationContext.getStopConditionList()) {
+        for (Class<? extends StopCondition> stopCondition : applicationContext.getStopConditionList()) {
             try {
                 ((DefaultListModel) stopConditionAvailableList.getModel())
                         .addElement(stopCondition.getConstructors()[0].newInstance());
@@ -328,7 +328,7 @@ public class WizardAction extends Wizard {
 
     private void addMeasurements() {
         measurementAvailableList.setModel(new DefaultListModel());
-        for (Class<? extends IMeasurement> measurement : applicationContext.getMeasurementList()) {
+        for (Class<? extends Measurement> measurement : applicationContext.getMeasurementList()) {
             try {
                 ((DefaultListModel) measurementAvailableList.getModel()).addElement(measurement.getConstructors()[0]
                         .newInstance());
@@ -395,7 +395,7 @@ public class WizardAction extends Wizard {
 
     private void measurementAvailableListSelectionListner() {
         if (measurementAvailableList.getSelectedValue() != null) {
-            measurementDescriptionTextArea.setText(((IMeasurement) measurementAvailableList.getSelectedValue())
+            measurementDescriptionTextArea.setText(((Measurement) measurementAvailableList.getSelectedValue())
                     .getDescription());
             measurementSelectedList.clearSelection();
         }
@@ -403,7 +403,7 @@ public class WizardAction extends Wizard {
 
     private void measurementSelectedListSelectionListner() {
         if (measurementSelectedList.getSelectedValue() != null) {
-            measurementDescriptionTextArea.setText(((IMeasurement) measurementSelectedList.getSelectedValue())
+            measurementDescriptionTextArea.setText(((Measurement) measurementSelectedList.getSelectedValue())
                     .getDescription());
             measurementAvailableList.clearSelection();
         }
@@ -535,7 +535,7 @@ public class WizardAction extends Wizard {
 
     private void stopConditionAvailableListSelectionListner() {
         if (stopConditionAvailableList.getSelectedValue() != null) {
-            stopConditionDescriptionTextArea.setText(((IStopCondition) stopConditionAvailableList.getSelectedValue())
+            stopConditionDescriptionTextArea.setText(((StopCondition) stopConditionAvailableList.getSelectedValue())
                     .getDescription());
             stopConditionSelectedList.clearSelection();
         }
@@ -543,7 +543,7 @@ public class WizardAction extends Wizard {
 
     private void stopConditionSelectedListSelectionListner() {
         if (stopConditionSelectedList.getSelectedValue() != null) {
-            stopConditionDescriptionTextArea.setText(((IStopCondition) stopConditionSelectedList.getSelectedValue())
+            stopConditionDescriptionTextArea.setText(((StopCondition) stopConditionSelectedList.getSelectedValue())
                     .getDescription());
             stopConditionAvailableList.clearSelection();
         }
@@ -577,19 +577,19 @@ public class WizardAction extends Wizard {
         Algorithm algorithm = (Algorithm) algorithmComboBox.getSelectedItem();
         algorithm.setProblem((Problem) problemComboBox.getSelectedItem());
 
-        List<IStopCondition> stopConditionList = new ArrayList<IStopCondition>();
+        List<StopCondition> stopConditionList = new ArrayList<StopCondition>();
         DefaultListModel selectedListModel = (DefaultListModel) stopConditionSelectedList.getModel();
         int size = stopConditionSelectedList.getModel().getSize();
         for (int i = 0; i < size; i++) {
-            stopConditionList.add((IStopCondition) selectedListModel.getElementAt(i));
+            stopConditionList.add((StopCondition) selectedListModel.getElementAt(i));
         }
         algorithm.setStopConditions(stopConditionList);
 
-        List<IMeasurement> measurementList = new ArrayList<IMeasurement>();
+        List<Measurement> measurementList = new ArrayList<Measurement>();
         selectedListModel = (DefaultListModel) measurementSelectedList.getModel();
         size = measurementSelectedList.getModel().getSize();
         for (int i = 0; i < size; i++) {
-            measurementList.add((IMeasurement) selectedListModel.getElementAt(i));
+            measurementList.add((Measurement) selectedListModel.getElementAt(i));
         }
         algorithm.setMeasurements(measurementList);
 

@@ -34,9 +34,9 @@ import javax.swing.DefaultComboBoxModel;
 import br.upe.ecomp.dosa.ApplicationContext;
 import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.core.Configurable;
-import br.upe.ecomp.doss.measurement.IMeasurement;
+import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.problem.Problem;
-import br.upe.ecomp.doss.stopCondition.IStopCondition;
+import br.upe.ecomp.doss.stopCondition.StopCondition;
 
 /**
  * Add behavior to the {@link UpdateAlgorithmDialog} <code>Dialog</code>.
@@ -174,10 +174,10 @@ public class UpdateAlgorithmActions extends UpdateAlgorithmDialog {
     }
 
     private void addStopConditionList() {
-        IStopCondition stopCondition;
-        for (Class<? extends IStopCondition> clazz : applicationContext.getStopConditionList()) {
+        StopCondition stopCondition;
+        for (Class<? extends StopCondition> clazz : applicationContext.getStopConditionList()) {
             try {
-                stopCondition = (IStopCondition) clazz.getConstructors()[0].newInstance();
+                stopCondition = (StopCondition) clazz.getConstructors()[0].newInstance();
                 if (!selectedElements.contains(stopCondition)) {
                     updateComboBox.addItem(stopCondition);
                 }
@@ -196,10 +196,10 @@ public class UpdateAlgorithmActions extends UpdateAlgorithmDialog {
     }
 
     private void addMeasurementList() {
-        IMeasurement measurement;
-        for (Class<? extends IMeasurement> clazz : applicationContext.getMeasurementList()) {
+        Measurement measurement;
+        for (Class<? extends Measurement> clazz : applicationContext.getMeasurementList()) {
             try {
-                measurement = (IMeasurement) clazz.getConstructors()[0].newInstance();
+                measurement = (Measurement) clazz.getConstructors()[0].newInstance();
                 if (!selectedElements.contains(measurement)) {
                     updateComboBox.addItem(measurement);
                 }
@@ -230,10 +230,10 @@ public class UpdateAlgorithmActions extends UpdateAlgorithmDialog {
                 algorithm.setProblem((Problem) updateComboBox.getSelectedItem());
                 break;
             case STOP_CONDITIONS:
-                algorithm.getStopConditions().add((IStopCondition) updateComboBox.getSelectedItem());
+                algorithm.getStopConditions().add((StopCondition) updateComboBox.getSelectedItem());
                 break;
             case MEASUREMENTS:
-                algorithm.getMeasurements().add((IMeasurement) updateComboBox.getSelectedItem());
+                algorithm.getMeasurements().add((Measurement) updateComboBox.getSelectedItem());
                 break;
             default:
                 // Do nothing.
