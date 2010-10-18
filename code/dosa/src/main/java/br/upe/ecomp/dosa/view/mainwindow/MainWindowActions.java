@@ -184,6 +184,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
         measurementResultComboBox.setEnabled(false);
         createChartResultButton.setEnabled(false);
+        resultsSplitPane.setRightComponent(new Panel());
 
         stepResultTextField.addKeyListener(new TextFieldKeyListener());
     }

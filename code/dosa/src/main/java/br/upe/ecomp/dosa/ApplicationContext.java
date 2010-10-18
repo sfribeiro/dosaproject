@@ -27,7 +27,7 @@ import java.util.List;
 import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.algorithm.pso.GlobalBestPSO;
 import br.upe.ecomp.doss.measurement.Measurement;
-import br.upe.ecomp.doss.measurement.Measurement1;
+import br.upe.ecomp.doss.measurement.BestFitness;
 import br.upe.ecomp.doss.problem.Problem;
 import br.upe.ecomp.doss.problem.Problem1;
 import br.upe.ecomp.doss.problem.RandomPeaksProblem;
@@ -69,7 +69,7 @@ public final class ApplicationContext {
         addStopCondition(StopCondition1.class);
 
         /* Measurements */
-        addMeasurement(Measurement1.class);
+        addMeasurement(BestFitness.class);
     }
 
     /**
