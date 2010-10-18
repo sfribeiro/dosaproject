@@ -50,6 +50,8 @@ public class ConfigureSimulationActions extends ConfigureSimulation implements R
      * 
      * @param parent the Frame from which the dialog is displayed.
      * @param algorithm {@link Algorithm} that will be simulated.
+     * @param filePath The path of the XML file representing the algorithm.
+     * @param fileName The name of the XML file representing the algorithm.
      */
     public ConfigureSimulationActions(Frame parent, Algorithm algorithm, String filePath, String fileName) {
         super(parent, true);
@@ -64,7 +66,7 @@ public class ConfigureSimulationActions extends ConfigureSimulation implements R
         numberSimulationsSpinner.setModel(new SpinnerNumberModel(1, 1, 999, 1));
         boolean enabled = false;
 
-        if (algorithm.getProblem().getDimensionsNumber() < 4) {
+        if (algorithm.getProblem().getDimensionsNumber() == 2) {
             enabled = true;
             numberSimulationsSpinner.addChangeListener(new ChangeListener() {
                 private int simulations;
@@ -93,14 +95,14 @@ public class ConfigureSimulationActions extends ConfigureSimulation implements R
         thread.start();
 
         if (!showSimulation) {
-            change();
+            showProgress();
         } else {
             closeDialog();
         }
 
     }
 
-    private void change() {
+    private void showProgress() {
         progressBar.setIndeterminate(true);
         ((CardLayout) defaultPanel.getLayout()).next(defaultPanel);
         repaint();
