@@ -33,7 +33,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import br.upe.ecomp.dosa.ApplicationContext;
 import br.upe.ecomp.doss.algorithm.Algorithm;
-import br.upe.ecomp.doss.core.Configurable;
+import br.upe.ecomp.doss.core.entity.Entity;
 import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.problem.Problem;
 import br.upe.ecomp.doss.stopCondition.StopCondition;
@@ -49,7 +49,7 @@ public class UpdateAlgorithmActions extends UpdateAlgorithmDialog {
 
     private final UpdateAlgorithmDialogEnum operation;
     private Algorithm algorithm;
-    private List<? extends Configurable> selectedElements;
+    private List<? extends Entity> selectedElements;
     private final ApplicationContext applicationContext;
 
     /**
@@ -100,7 +100,7 @@ public class UpdateAlgorithmActions extends UpdateAlgorithmDialog {
             public void actionPerformed(final ActionEvent evt) {
                 String description = "";
                 if (updateComboBox.getSelectedIndex() > 0) {
-                    description = ((Configurable) updateComboBox.getSelectedItem()).getDescription();
+                    description = ((Entity) updateComboBox.getSelectedItem()).getDescription();
                 }
                 updateDescriptionTextArea.setText(description);
             }

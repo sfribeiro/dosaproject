@@ -21,6 +21,7 @@
  */
 package br.upe.ecomp.dosa.view.mainwindow;
 
+import java.awt.CardLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,7 +48,7 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.lang.StringUtils;
 
-import br.upe.ecomp.dosa.controller.chart.FileBoxplotFileManager;
+import br.upe.ecomp.dosa.controller.chart.FileBoxplotChartManager;
 import br.upe.ecomp.dosa.controller.chart.FileResultsAnalyser;
 import br.upe.ecomp.dosa.controller.chart.IChartManager;
 import br.upe.ecomp.dosa.controller.chart.IResultsAnalyzer;
@@ -57,7 +58,8 @@ import br.upe.ecomp.dosa.view.mainwindow.tree.TreeNodeTypeEnum;
 import br.upe.ecomp.dosa.view.wizard.WizardAction;
 import br.upe.ecomp.dosa.view.wizard.WizardListener;
 import br.upe.ecomp.doss.algorithm.Algorithm;
-import br.upe.ecomp.doss.core.Configurable;
+import br.upe.ecomp.doss.core.entity.Entity;
+import br.upe.ecomp.doss.core.entity.EntityPropertyManager;
 import br.upe.ecomp.doss.core.parser.AlgorithmXMLParser;
 import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.recorder.FileRecorder;
@@ -107,6 +109,8 @@ public class MainWindowActions extends MainWindow implements WizardListener {
         this.filePath = filePath;
         this.fileName = fileName;
         configureTree();
+        updateToolBarButtonsState();
+        ((CardLayout) panelTestScenario.getLayout()).last(panelTestScenario);
     }
 
     private void updateToolBarButtonsState() {
@@ -117,27 +121,18 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
     @Override
     protected void openToolBarButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        JFileChooser fileopen = new JFileChooser();
-        fileopen.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
-        int ret = fileopen.showDialog(this, "Open file");
-
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            fileName = fileopen.getSelectedFile().getName();
-            filePath = fileopen.getSelectedFile().getPath().replace(fileName, "");
-
-            algorithm = AlgorithmXMLParser.read(filePath, fileName);
-            configureTree();
-        }
-        updateToolBarButtonsState();
+        openTestScenario();
     }
 
     @Override
     protected void newToolBarButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        newTestScenario();
+    }
+
+    private void newTestScenario() {
         WizardAction wizard = new WizardAction(MainWindowActions.this);
         wizard.setWizardListener(MainWindowActions.this);
         wizard.setVisible(true);
-        updateToolBarButtonsState();
     }
 
     @Override
@@ -150,6 +145,33 @@ public class MainWindowActions extends MainWindow implements WizardListener {
         algorithm.setRecorder(new FileRecorder());
         ConfigureSimulation configureSimulation = new ConfigureSimulationActions(this, algorithm, filePath, fileName);
         configureSimulation.setVisible(true);
+    }
+
+    @Override
+    protected void openTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        openTestScenario();
+    }
+
+    private void openTestScenario() {
+        JFileChooser fileopen = new JFileChooser();
+        fileopen.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int ret = fileopen.showDialog(this, "Open file");
+
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            fileName = fileopen.getSelectedFile().getName();
+            filePath = fileopen.getSelectedFile().getPath().replace(fileName, "");
+
+            algorithm = AlgorithmXMLParser.read(filePath, fileName);
+            configureTree();
+            updateToolBarButtonsState();
+            ((CardLayout) panelTestScenario.getLayout()).last(panelTestScenario);
+        }
+    }
+
+    @Override
+    protected void newTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        newTestScenario();
     }
 
     @Override
@@ -180,7 +202,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
     private void initResultsTab() {
         resultsAnalyzer = new FileResultsAnalyser();
-        chartManager = new FileBoxplotFileManager();
+        chartManager = new FileBoxplotChartManager();
 
         measurementResultComboBox.setEnabled(false);
         createChartResultButton.setEnabled(false);
@@ -353,7 +375,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
                 if (node != null
                         && (node.isAlgorithm() || node.isProblemChild() || node.isStopConditionChild() || node
                                 .isMeassurementChild())) {
-                    configureTable((Configurable) node.getUserObject());
+                    configureTable((Entity) node.getUserObject());
                 } else {
                     table.setModel(new DefaultTableModel());
                 }
@@ -400,25 +422,25 @@ public class MainWindowActions extends MainWindow implements WizardListener {
         }
     }
 
-    private void configureTable(Configurable configurable) {
+    private void configureTable(Object entity) {
         TableModel model = null;
-        if (configurable == null) {
+        if (entity == null) {
             model = new DefaultTableModel();
         } else {
             String[] columnNames = new String[] { "Parameter", "Value" };
-            Object[][] data = new Object[configurable.getParametersMap().size()][2];
-            prepareTableData(configurable, data);
+            Object[][] data = new Object[EntityPropertyManager.getParametersNameFromFields(entity).size()][2];
+            prepareTableData(entity, data);
 
-            model = new ExtendedTableModel(configurable, columnNames, data);
+            model = new ExtendedTableModel(entity, columnNames, data);
         }
         table.setModel(model);
     }
 
-    private void prepareTableData(Configurable configurable, Object[][] data) {
+    private void prepareTableData(Object entity, Object[][] data) {
         int i = 0;
-        for (String parameterName : configurable.getParametersMap().keySet()) {
+        for (String parameterName : EntityPropertyManager.getParametersNameFromFields(entity)) {
             data[i][0] = parameterName;
-            data[i][1] = configurable.getParameterByName(parameterName);
+            data[i][1] = EntityPropertyManager.getValue(entity, parameterName);
             i++;
         }
     }

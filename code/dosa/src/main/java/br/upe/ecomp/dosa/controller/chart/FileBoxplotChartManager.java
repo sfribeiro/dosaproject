@@ -46,14 +46,14 @@ import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
  * 
  * @author Rodrigo Castro
  */
-public class FileBoxplotFileManager implements IChartManager {
+public class FileBoxplotChartManager implements IChartManager {
 
     private IResultsAnalyzer resultsAnalyzer;
 
     /**
      * Creates a new instance of this class.
      */
-    public FileBoxplotFileManager() {
+    public FileBoxplotChartManager() {
         resultsAnalyzer = new FileResultsAnalyser();
     }
 
@@ -71,7 +71,7 @@ public class FileBoxplotFileManager implements IChartManager {
 
         chartPanel.setLayout(new java.awt.GridLayout(1, 1));
 
-        JFreeChart chart = createChart("Teste", "Iterations", "Fitness", createSampleDataset(values), logarithmicYAxis);
+        JFreeChart chart = createChart("", "Iterations", "Fitness", createSampleDataset(values), logarithmicYAxis);
 
         ChartPanel jFreeChartPanel = new ChartPanel(chart);
         chartPanel.add(jFreeChartPanel);
@@ -119,8 +119,7 @@ public class FileBoxplotFileManager implements IChartManager {
             }
             Collections.sort(list);
             // dataset.add(list, "Series", " Iteration " + i);
-            dataset.add(BoxAndWhiskerCalculator.calculateBoxAndWhiskerStatistics(list),
-                    "PSS - PSO Simulation Shell - Boxplot Evolution chart", i);
+            dataset.add(BoxAndWhiskerCalculator.calculateBoxAndWhiskerStatistics(list), "Boxplot Evolution chart", i);
         }
         return dataset;
     }

@@ -42,10 +42,14 @@ public abstract class MainWindow extends javax.swing.JFrame {
     protected javax.swing.JMenuBar menuBar;
     protected javax.swing.JMenu menuFile;
     protected javax.swing.JMenuItem menuItemExit;
+    protected javax.swing.JButton newTestScenarioButton;
     protected javax.swing.JButton newToolBarButton;
+    protected javax.swing.JButton openTestScenarioButton;
     protected javax.swing.JButton openToolBarButton;
     protected javax.swing.JPanel panelAlgorithm;
     protected javax.swing.JPanel panelResults;
+    protected javax.swing.JPanel panelTestScenario;
+    protected javax.swing.JPanel panelTestScenarioInit;
     protected javax.swing.JButton resultDirectoryButton;
     protected javax.swing.JTextField resultDirectoryTextField;
     protected javax.swing.JLabel resultsDirectoryLabel;
@@ -62,6 +66,8 @@ public abstract class MainWindow extends javax.swing.JFrame {
     protected javax.swing.JToolBar toolBar;
     protected javax.swing.JPanel toolBarPanel;
     protected javax.swing.JTree tree;
+
+    // End of variables declaration
 
     /**
      * Creates new form NewJFrame.
@@ -91,6 +97,10 @@ public abstract class MainWindow extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JToolBar.Separator();
         startSimulationToolBarButton = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
+        panelTestScenario = new javax.swing.JPanel();
+        panelTestScenarioInit = new javax.swing.JPanel();
+        newTestScenarioButton = new javax.swing.JButton();
+        openTestScenarioButton = new javax.swing.JButton();
         panelAlgorithm = new javax.swing.JPanel();
         splitPaneAlgorithm = new javax.swing.JSplitPane();
         scrollPaneTree = new javax.swing.JScrollPane();
@@ -205,7 +215,53 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
         getContentPane().add(toolBarPanel);
 
-        panelAlgorithm.setLayout(new java.awt.GridLayout(1, 0));
+        panelTestScenario.setLayout(new java.awt.CardLayout());
+
+        panelTestScenarioInit.setLayout(new java.awt.GridLayout(2, 2, 0, 30));
+
+        newTestScenarioButton.setBackground(new java.awt.Color(128, 128, 128));
+        newTestScenarioButton.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
+        newTestScenarioButton.setIcon(new javax.swing.ImageIcon(ClassLoader.getSystemResource("images/new.png")));
+        newTestScenarioButton.setText("Create Test Scenario");
+        newTestScenarioButton.setToolTipText("New");
+        newTestScenarioButton.setBorderPainted(false);
+        newTestScenarioButton.setFocusable(false);
+        newTestScenarioButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        newTestScenarioButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        newTestScenarioButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        newTestScenarioButton.setPreferredSize(new java.awt.Dimension(32, 32));
+        newTestScenarioButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        newTestScenarioButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        newTestScenarioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newTestScenarioButtonActionPerformed(evt);
+            }
+        });
+        panelTestScenarioInit.add(newTestScenarioButton);
+
+        openTestScenarioButton.setBackground(new java.awt.Color(128, 128, 128));
+        openTestScenarioButton.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
+        openTestScenarioButton.setIcon(new javax.swing.ImageIcon(ClassLoader.getSystemResource("images/open.png")));
+        openTestScenarioButton.setText("Open Test Scenario");
+        openTestScenarioButton.setToolTipText("Open");
+        openTestScenarioButton.setBorderPainted(false);
+        openTestScenarioButton.setFocusable(false);
+        openTestScenarioButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        openTestScenarioButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        openTestScenarioButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        openTestScenarioButton.setPreferredSize(new java.awt.Dimension(32, 32));
+        openTestScenarioButton.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        openTestScenarioButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        openTestScenarioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openTestScenarioButtonActionPerformed(evt);
+            }
+        });
+        panelTestScenarioInit.add(openTestScenarioButton);
+
+        panelTestScenario.add(panelTestScenarioInit, "card3");
+
+        panelAlgorithm.setLayout(new java.awt.GridLayout());
 
         splitPaneAlgorithm.setDividerLocation(150);
         splitPaneAlgorithm.setDividerSize(5);
@@ -224,7 +280,9 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
         panelAlgorithm.add(splitPaneAlgorithm);
 
-        tabbedPane.addTab("Algorithm", panelAlgorithm);
+        panelTestScenario.add(panelAlgorithm, "card2");
+
+        tabbedPane.addTab("Simulation", panelTestScenario);
 
         panelResults.setLayout(new java.awt.GridLayout(1, 0));
 
@@ -369,6 +427,10 @@ public abstract class MainWindow extends javax.swing.JFrame {
     protected abstract void resultDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt);
 
     protected abstract void createChartResultButtonActionPerformed(java.awt.event.ActionEvent evt);
+
+    protected abstract void openTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt);
+
+    protected abstract void newTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt);
 
     /**
      * @param args the command line arguments

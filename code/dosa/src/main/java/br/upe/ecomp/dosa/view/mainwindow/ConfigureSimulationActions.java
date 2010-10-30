@@ -31,8 +31,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import br.upe.ecomp.doss.algorithm.Algorithm;
-import br.upe.ecomp.doss.core.Runner;
-import br.upe.ecomp.doss.core.RunnerListener;
+import br.upe.ecomp.doss.runner.Runner;
+import br.upe.ecomp.doss.runner.RunnerListener;
 
 /**
  * 

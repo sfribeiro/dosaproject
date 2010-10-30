@@ -148,7 +148,7 @@ public abstract class Wizard extends javax.swing.JDialog {
         cancelButton = new JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Add Algorithm Wizard");
+        setTitle("Creation Test Scenario Wizard");
         setAlwaysOnTop(true);
 
         defaultPanel.setLayout(new CardLayout());

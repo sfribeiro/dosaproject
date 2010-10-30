@@ -23,10 +23,10 @@ package br.upe.ecomp.dosa.view.mainwindow.table;
 
 import javax.swing.table.AbstractTableModel;
 
-import br.upe.ecomp.doss.core.Configurable;
+import br.upe.ecomp.doss.core.entity.EntityPropertyManager;
 
 /**
- * Extended table model to handle the configuration of {@link Configurable} objects.
+ * Extended table model to handle the configuration of {@link Entity} objects.
  * 
  * @author Rodrigo Castro
  */
@@ -34,19 +34,19 @@ public class ExtendedTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
 
-    private Configurable configurable;
+    private Object entity;
     private String[] columnNames;
     private Object[][] data;
 
     /**
      * Default constructor.
      * 
-     * @param configurable The {@link Configurable} object that will be configured.
+     * @param entity The object that will be configured.
      * @param columnNames The name of the columns.
      * @param data The data to be used to fill the table.
      */
-    public ExtendedTableModel(Configurable configurable, String[] columnNames, Object[][] data) {
-        this.configurable = configurable;
+    public ExtendedTableModel(Object entity, String[] columnNames, Object[][] data) {
+        this.entity = entity;
         this.columnNames = columnNames;
         this.data = data;
     }
@@ -82,11 +82,7 @@ public class ExtendedTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        boolean isEditable = true;
-        if (col < 1) {
-            isEditable = false;
-        }
-        return isEditable;
+        return col > 0;
     }
 
     @Override
@@ -95,14 +91,8 @@ public class ExtendedTableModel extends AbstractTableModel {
         data[row][col] = newValue;
 
         String parameterName = (String) data[row][0];
-        Class<?> classType = configurable.getParametersMap().get(parameterName);
-        if (classType.equals(Integer.class)) {
-            configurable.setParameterByName(parameterName, Integer.parseInt(newValue));
-        } else if (classType.equals(Double.class)) {
-            configurable.setParameterByName(parameterName, Double.parseDouble(newValue));
-        } else {
-            configurable.setParameterByName(parameterName, newValue);
-        }
+
+        EntityPropertyManager.setValue(entity, parameterName, String.valueOf(value));
 
         fireTableCellUpdated(row, col);
     }
