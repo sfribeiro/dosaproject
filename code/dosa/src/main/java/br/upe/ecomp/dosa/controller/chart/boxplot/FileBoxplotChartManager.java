@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package br.upe.ecomp.dosa.controller.chart;
+package br.upe.ecomp.dosa.controller.chart.boxplot;
 
 import java.awt.Color;
 import java.awt.Panel;
@@ -41,20 +41,22 @@ import org.jfree.data.statistics.BoxAndWhiskerCalculator;
 import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
+import br.upe.ecomp.dosa.controller.chart.IChartManager;
+
 /**
- * Plot the boxplot chart.
+ * Plot a boxplot chart.
  * 
  * @author Rodrigo Castro
  */
 public class FileBoxplotChartManager implements IChartManager {
 
-    private IResultsAnalyzer resultsAnalyzer;
+    private FileBoxPlotResultsAnalyser resultsAnalyzer;
 
     /**
      * Creates a new instance of this class.
      */
     public FileBoxplotChartManager() {
-        resultsAnalyzer = new FileResultsAnalyser();
+        resultsAnalyzer = new FileBoxPlotResultsAnalyser();
     }
 
     /**
@@ -62,11 +64,11 @@ public class FileBoxplotChartManager implements IChartManager {
      */
     public Panel plot(List<File> files, String measurement, int step, boolean logarithmicYAxis) {
         Integer lastIteration = resultsAnalyzer.getLastIteration(files);
-        Double[][] data = resultsAnalyzer.getData(files, measurement, lastIteration, step);
+        double[][] data = resultsAnalyzer.getData(files, measurement, lastIteration, step);
         return createContents(data, logarithmicYAxis);
     }
 
-    private Panel createContents(Double[][] values, boolean logarithmicYAxis) {
+    private Panel createContents(double[][] values, boolean logarithmicYAxis) {
         Panel chartPanel = new Panel();
 
         chartPanel.setLayout(new java.awt.GridLayout(1, 1));
@@ -108,7 +110,7 @@ public class FileBoxplotChartManager implements IChartManager {
         return chart;
     }
 
-    private BoxAndWhiskerCategoryDataset createSampleDataset(Double[][] values) {
+    private BoxAndWhiskerCategoryDataset createSampleDataset(double[][] values) {
 
         DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
         ArrayList<Double> list = null;

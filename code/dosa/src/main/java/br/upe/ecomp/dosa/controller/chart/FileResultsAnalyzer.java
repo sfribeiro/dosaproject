@@ -36,14 +36,14 @@ import java.util.Set;
 import br.upe.ecomp.doss.core.exception.InfraException;
 
 /**
- * Class to pre process files results.
+ * .
  * 
  * @author Rodrigo Castro
  */
-public class FileResultsAnalyser implements IResultsAnalyzer {
+public class FileResultsAnalyzer implements IResultsAnalyzer {
 
-    private static final String RESULT_TOKEN = ":";
     private static final String MEASUREMENTS = "Measurements:";
+    protected static final String RESULT_TOKEN = ":";
 
     /**
      * {@inheritDoc}
@@ -69,30 +69,6 @@ public class FileResultsAnalyser implements IResultsAnalyzer {
             }
         }
         return getLastCommonIteration(new ArrayList<Integer>(lastIterations));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Double[][] getData(List<File> files, String measurement, Integer lastIteration, int step) {
-        int iterations = lastIteration / step;
-
-        // We want to guarantee that the last iteration is always computed.
-        // if (lastIteration % step != 0) {
-        // iterations += 1;
-        // }
-
-        Double[][] results = new Double[iterations][files.size()];
-        for (int i = 0; i < iterations; i++) {
-            results[i] = new Double[files.size()];
-        }
-
-        int currentFile = 0;
-        for (File file : files) {
-            readResults(file, measurement, lastIteration, results, step, currentFile);
-            currentFile++;
-        }
-        return results;
     }
 
     private List<String> getMeasurementList(File file) {
@@ -206,46 +182,5 @@ public class FileResultsAnalyser implements IResultsAnalyzer {
     private Integer getLastCommonIteration(List<Integer> lastIterations) {
         Collections.sort(lastIterations);
         return lastIterations.get(0);
-    }
-
-    private void readResults(File file, String measurement, Integer lastIteration, Double[][] results, int step,
-            int currentFile) {
-        BufferedReader reader = null;
-        String measurementValue = null;
-        String line = null;
-        String measurementLine = measurement + ":";
-        try {
-            reader = new BufferedReader(new FileReader(file));
-            int i = 0;
-            int iteration = 0;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith(measurementLine)) {
-                    measurementValue = line.split(RESULT_TOKEN)[1].trim();
-                    if (iteration % step == 0) {
-                        results[i++][currentFile] = Double.parseDouble(measurementValue);
-                    }
-                    iteration += 1;
-                }
-            }
-
-            // Guarantees that the last iteration is always computed.
-            // if ((iteration - 1) % step != 0) {
-            // results[i][currentFile] = Double.parseDouble(measurementValue);
-            // }
-
-        } catch (FileNotFoundException cause) {
-            throw new InfraException("Unable to find the file: " + file.getName(), cause);
-        } catch (IOException cause) {
-            throw new InfraException("Error while reading the file: " + file.getName(), cause);
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // TODO Log!
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 }

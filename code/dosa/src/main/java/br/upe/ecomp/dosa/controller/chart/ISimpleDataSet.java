@@ -25,26 +25,20 @@ import java.io.File;
 import java.util.List;
 
 /**
- * Performs some analysis on the results of simulations.
+ * .
  * 
  * @author Rodrigo Castro
  */
-public interface IResultsAnalyzer {
+public interface ISimpleDataSet {
 
     /**
-     * Given the list of result files, returns the list of measurements that appears on all files.
+     * Gets the data to plot the chart.
      * 
-     * @param files The list of file results.
-     * @return The list of measurements that appears on all files.
+     * @param file The file results.
+     * @param measurement The measurement that will be analyzed.
+     * @param lastIteration The biggest iteration that will be tacked into account.
+     * @param step The interval into which the data will be read.
+     * @return The data to plot the chart.
      */
-    List<String> searchCommonsMeasurements(List<File> files);
-
-    /**
-     * Given the list of result files, returns the biggest iteration that is common to all
-     * simulations.
-     * 
-     * @param files The list of file results.
-     * @return The biggest iteration that is common to all simulations.
-     */
-    Integer getLastIteration(List<File> files);
+    double[] getData(List<File> file, String measurement, Integer lastIteration, Integer step);
 }

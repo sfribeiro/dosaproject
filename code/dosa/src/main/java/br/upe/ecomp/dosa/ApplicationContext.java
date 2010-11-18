@@ -25,15 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.upe.ecomp.doss.algorithm.Algorithm;
-import br.upe.ecomp.doss.algorithm.pso.GlobalBestPSO;
-import br.upe.ecomp.doss.measurement.Measurement;
+import br.upe.ecomp.doss.algorithm.chargedpso.ChargedClanPSO;
+import br.upe.ecomp.doss.algorithm.chargedpso.ChargedGlobalBestPSO;
+import br.upe.ecomp.doss.algorithm.chargedpso.ChargedLocalBestPSO;
+import br.upe.ecomp.doss.algorithm.clanpso.ClanPSO;
+import br.upe.ecomp.doss.algorithm.fss.FSS;
+import br.upe.ecomp.doss.algorithm.pso.LocalBestPSO;
 import br.upe.ecomp.doss.measurement.BestFitness;
+import br.upe.ecomp.doss.measurement.MeanFitness;
+import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.problem.Problem;
-import br.upe.ecomp.doss.problem.Problem1;
-import br.upe.ecomp.doss.problem.RandomPeaksProblem;
+import br.upe.ecomp.doss.problem.RandomPeaks;
+import br.upe.ecomp.doss.problem.df1.DF1;
+import br.upe.ecomp.doss.problem.movingpeaks.MovingPeaks;
 import br.upe.ecomp.doss.stopCondition.MaximumIterationsStopCondition;
 import br.upe.ecomp.doss.stopCondition.StopCondition;
-import br.upe.ecomp.doss.stopCondition.StopCondition1;
 
 /**
  * Configures the application.
@@ -58,18 +64,24 @@ public final class ApplicationContext {
         measurementList = new ArrayList<Class<? extends Measurement>>();
 
         /* Algorithms */
-        addAlgorithm(GlobalBestPSO.class);
+        addAlgorithm(LocalBestPSO.class);
+        addAlgorithm(ChargedGlobalBestPSO.class);
+        addAlgorithm(ChargedLocalBestPSO.class);
+        addAlgorithm(ClanPSO.class);
+        addAlgorithm(FSS.class);
+        addAlgorithm(ChargedClanPSO.class);
 
         /* Problems */
-        addProblem(Problem1.class);
-        addProblem(RandomPeaksProblem.class);
+        addProblem(MovingPeaks.class);
+        addProblem(DF1.class);
+        addProblem(RandomPeaks.class);
 
         /* Stop Conditions */
         addStopCondition(MaximumIterationsStopCondition.class);
-        addStopCondition(StopCondition1.class);
 
         /* Measurements */
         addMeasurement(BestFitness.class);
+        addMeasurement(MeanFitness.class);
     }
 
     /**

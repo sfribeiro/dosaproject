@@ -59,6 +59,7 @@ public class ConfigureSimulationActions extends ConfigureSimulation implements R
         this.filePath = filePath;
         this.fileName = fileName;
 
+        algorithm.getProblem().init();
         initNumberSimulationsSpinner(algorithm);
     }
 

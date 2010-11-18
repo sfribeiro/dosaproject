@@ -22,6 +22,8 @@
 package br.upe.ecomp.dosa.view.mainwindow;
 
 import java.awt.CardLayout;
+import java.awt.Dialog.ModalityType;
+import java.awt.FileDialog;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,13 +33,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -48,10 +51,11 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.lang.StringUtils;
 
-import br.upe.ecomp.dosa.controller.chart.FileBoxplotChartManager;
-import br.upe.ecomp.dosa.controller.chart.FileResultsAnalyser;
+import br.upe.ecomp.dosa.controller.chart.FileResultsAnalyzer;
 import br.upe.ecomp.dosa.controller.chart.IChartManager;
 import br.upe.ecomp.dosa.controller.chart.IResultsAnalyzer;
+import br.upe.ecomp.dosa.controller.chart.boxplot.FileBoxplotChartManager;
+import br.upe.ecomp.dosa.controller.chart.line.FileLineChartManager;
 import br.upe.ecomp.dosa.view.mainwindow.table.ExtendedTableModel;
 import br.upe.ecomp.dosa.view.mainwindow.tree.ExtendedTreeNode;
 import br.upe.ecomp.dosa.view.mainwindow.tree.TreeNodeTypeEnum;
@@ -153,14 +157,19 @@ public class MainWindowActions extends MainWindow implements WizardListener {
     }
 
     private void openTestScenario() {
-        JFileChooser fileopen = new JFileChooser();
-        fileopen.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileDialog fileopen = new FileDialog(this, "Open Test Scenario", FileDialog.LOAD);
+        fileopen.setFilenameFilter(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith("xml");
+            }
+        });
 
-        int ret = fileopen.showDialog(this, "Open file");
+        fileopen.setVisible(true);
 
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            fileName = fileopen.getSelectedFile().getName();
-            filePath = fileopen.getSelectedFile().getPath().replace(fileName, "");
+        if (fileopen.getFile() != null) {
+            filePath = fileopen.getDirectory();
+            fileName = fileopen.getFile();
 
             algorithm = AlgorithmXMLParser.read(filePath, fileName);
             configureTree();
@@ -176,52 +185,109 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
     @Override
     protected void resultDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        JFileChooser directoryOpen = new JFileChooser();
-        directoryOpen.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-        int ret = directoryOpen.showDialog(this, "Open directory");
-
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            File directory = directoryOpen.getSelectedFile();
-            resultDirectoryTextField.setText(directory.getPath());
-            resultFiles = getFilesOnDirectory(directory);
-
-            updateMeasurementResultComboBox();
+        if (chooseDirectory(resultDirectoryTextField)) {
+            updateMeasurementBoxplotComboBox();
         }
     }
 
     @Override
-    protected void createChartResultButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    protected void resultFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        if (chooseDirectory(resultFileTextField)) {
+            updateMeasurementLineComboBox();
+        }
+    }
+
+    private boolean chooseDirectory(JTextField textField) {
+        boolean directoryChoosed = false;
+        FileDialog fileopen = new FileDialog(this, "Open Results Directory", FileDialog.LOAD);
+        fileopen.setModalityType(ModalityType.DOCUMENT_MODAL);
+
+        System.setProperty("apple.awt.fileDialogForDirectories", "true");
+        fileopen.setVisible(true);
+        System.setProperty("apple.awt.fileDialogForDirectories", "false");
+
+        if (fileopen.getFile() != null) {
+            File directory = new File(fileopen.getDirectory(), fileopen.getFile());
+            textField.setText(directory.getPath());
+
+            resultFiles = getFilesOnDirectory(directory);
+            // List<File> foundFiles = ;
+            // for (File file : foundFiles) {
+            // if (file.getName().endsWith(".txt")) {
+            // resultFiles.add(file);
+            // }
+            // }
+            directoryChoosed = true;
+        }
+        return directoryChoosed;
+    }
+
+    @Override
+    protected void createBoxplotChartButtonActionPerformed(java.awt.event.ActionEvent evt) {
         String measurement = (String) measurementResultComboBox.getSelectedItem();
         Integer step = Integer.parseInt(stepResultTextField.getText());
         boolean logarithmicYAxis = logarithmicResultCheckBox.isSelected();
 
-        Panel panel = chartManager.plot(resultFiles, measurement, step, logarithmicYAxis);
+        Panel panel = new FileBoxplotChartManager().plot(resultFiles, measurement, step, logarithmicYAxis);
+        resultsSplitPane.setRightComponent(panel);
+    }
+
+    @Override
+    protected void createLineChartButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        String measurement = (String) measurementLineResultComboBox.getSelectedItem();
+        Integer step = Integer.parseInt(stepLineResultTextField.getText());
+
+        Panel panel = new FileLineChartManager().plot(resultFiles, measurement, step, false);
         resultsSplitPane.setRightComponent(panel);
     }
 
     private void initResultsTab() {
-        resultsAnalyzer = new FileResultsAnalyser();
-        chartManager = new FileBoxplotChartManager();
+        chartTypeComboBox.setModel(new DefaultComboBoxModel());
+        chartTypeComboBox.addItem("Boxplot");
+        chartTypeComboBox.addItem("Line");
+        chartTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if (chartTypeComboBox.getSelectedIndex() == 0) {
+                    ((CardLayout) jPanel1.getLayout()).first(jPanel1);
+                } else {
+                    ((CardLayout) jPanel1.getLayout()).last(jPanel1);
+                }
+            }
+        });
+        ((CardLayout) jPanel1.getLayout()).first(jPanel1);
+
+        resultsAnalyzer = new FileResultsAnalyzer();
+        // rtManager = new FileBoxplotChartManager();
+        // chartManager = new FileLineChartManager();
 
         measurementResultComboBox.setEnabled(false);
-        createChartResultButton.setEnabled(false);
+        // createBoxplotChartButton.setEnabled(false);
         resultsSplitPane.setRightComponent(new Panel());
 
-        stepResultTextField.addKeyListener(new TextFieldKeyListener());
+        // stepResultTextField.addKeyListener(new TextFieldKeyListener());
     }
 
-    private void updateMeasurementResultComboBox() {
+    private void updateMeasurementBoxplotComboBox() {
         measurementsResultList = resultsAnalyzer.searchCommonsMeasurements(resultFiles);
         measurementResultComboBox.setModel(new DefaultComboBoxModel(measurementsResultList
                 .toArray(new String[measurementsResultList.size()])));
         measurementResultComboBox.setEnabled(true);
     }
 
+    private void updateMeasurementLineComboBox() {
+        measurementsResultList = resultsAnalyzer.searchCommonsMeasurements(resultFiles);
+        measurementLineResultComboBox.setModel(new DefaultComboBoxModel(measurementsResultList
+                .toArray(new String[measurementsResultList.size()])));
+        measurementLineResultComboBox.setEnabled(true);
+    }
+
     private List<File> getFilesOnDirectory(File directory) {
         List<File> files = new ArrayList<File>();
         for (File file : directory.listFiles()) {
-            files.add(file);
+            if (file.getName().endsWith(".txt")) {
+                files.add(file);
+            }
         }
         return files;
     }
@@ -454,7 +520,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
         public void keyTyped(final KeyEvent key) {
             isFinishEnabled = !StringUtils.isBlank(stepResultTextField.getText()) && resultFiles != null
                     && measurementResultComboBox.getSelectedItem() != null;
-            createChartResultButton.setEnabled(isFinishEnabled);
+            createBoxplotChartButton.setEnabled(isFinishEnabled);
         }
 
         public void keyReleased(final KeyEvent key) {

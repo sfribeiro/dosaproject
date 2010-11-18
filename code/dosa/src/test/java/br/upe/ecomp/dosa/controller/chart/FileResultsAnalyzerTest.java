@@ -28,6 +28,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import br.upe.ecomp.dosa.controller.chart.boxplot.FileBoxPlotResultsAnalyser;
+
 /**
  * Test class for FilePreProcessor.
  */
@@ -50,7 +52,7 @@ public class FileResultsAnalyzerTest {
         List<String> list3 = Arrays.asList("measure2", "measure3", "measure4");
 
         // Step 2
-        List<String> returnedList = new FileResultsAnalyser().findCommonsMeasurements(Arrays
+        List<String> returnedList = new FileBoxPlotResultsAnalyser().findCommonsMeasurements(Arrays
                 .asList(list1, list2, list3));
 
         // Step 3

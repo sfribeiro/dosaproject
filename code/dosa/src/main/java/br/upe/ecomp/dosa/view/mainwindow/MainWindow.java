@@ -31,12 +31,21 @@ package br.upe.ecomp.dosa.view.mainwindow;
 public abstract class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify
+    protected javax.swing.JComboBox chartTypeComboBox;
+    protected javax.swing.JLabel chartTypeLabel;
+    protected javax.swing.JPanel chartTypePanel;
     protected javax.swing.JPanel configChartPanel;
-    protected javax.swing.JButton createChartResultButton;
+    protected javax.swing.JButton createBoxplotChartButton;
+    protected javax.swing.JButton createLineChartButton;
+    protected javax.swing.JPanel jPanel1;
+    protected javax.swing.JPanel jPanel4;
     protected javax.swing.JToolBar.Separator jSeparator1;
     protected javax.swing.JToolBar.Separator jSeparator2;
     protected javax.swing.JToolBar.Separator jSeparator3;
+    protected javax.swing.JPanel lineChartPanel;
     protected javax.swing.JCheckBox logarithmicResultCheckBox;
+    protected javax.swing.JComboBox measurementLineResultComboBox;
+    protected javax.swing.JLabel measurementLineResultLabel;
     protected javax.swing.JComboBox measurementResultComboBox;
     protected javax.swing.JLabel measurementResultLabel;
     protected javax.swing.JMenuBar menuBar;
@@ -52,6 +61,9 @@ public abstract class MainWindow extends javax.swing.JFrame {
     protected javax.swing.JPanel panelTestScenarioInit;
     protected javax.swing.JButton resultDirectoryButton;
     protected javax.swing.JTextField resultDirectoryTextField;
+    protected javax.swing.JButton resultFileButton;
+    protected javax.swing.JLabel resultFileLabel;
+    protected javax.swing.JTextField resultFileTextField;
     protected javax.swing.JLabel resultsDirectoryLabel;
     protected javax.swing.JSplitPane resultsSplitPane;
     protected javax.swing.JButton saveToolBarButton;
@@ -59,6 +71,8 @@ public abstract class MainWindow extends javax.swing.JFrame {
     protected javax.swing.JScrollPane scrollPaneTree;
     protected javax.swing.JSplitPane splitPaneAlgorithm;
     protected javax.swing.JButton startSimulationToolBarButton;
+    protected javax.swing.JLabel stepLineResultLabel;
+    protected javax.swing.JTextField stepLineResultTextField;
     protected javax.swing.JLabel stepResultLabel;
     protected javax.swing.JTextField stepResultTextField;
     protected javax.swing.JTabbedPane tabbedPane;
@@ -110,6 +124,8 @@ public abstract class MainWindow extends javax.swing.JFrame {
         panelResults = new javax.swing.JPanel();
         resultsSplitPane = new javax.swing.JSplitPane();
         configChartPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         resultsDirectoryLabel = new javax.swing.JLabel();
         resultDirectoryTextField = new javax.swing.JTextField();
         resultDirectoryButton = new javax.swing.JButton();
@@ -117,8 +133,20 @@ public abstract class MainWindow extends javax.swing.JFrame {
         measurementResultComboBox = new javax.swing.JComboBox();
         stepResultLabel = new javax.swing.JLabel();
         stepResultTextField = new javax.swing.JTextField();
-        createChartResultButton = new javax.swing.JButton();
+        createBoxplotChartButton = new javax.swing.JButton();
         logarithmicResultCheckBox = new javax.swing.JCheckBox();
+        lineChartPanel = new javax.swing.JPanel();
+        resultFileLabel = new javax.swing.JLabel();
+        resultFileTextField = new javax.swing.JTextField();
+        resultFileButton = new javax.swing.JButton();
+        measurementLineResultLabel = new javax.swing.JLabel();
+        measurementLineResultComboBox = new javax.swing.JComboBox();
+        stepLineResultLabel = new javax.swing.JLabel();
+        stepLineResultTextField = new javax.swing.JTextField();
+        createLineChartButton = new javax.swing.JButton();
+        chartTypePanel = new javax.swing.JPanel();
+        chartTypeLabel = new javax.swing.JLabel();
+        chartTypeComboBox = new javax.swing.JComboBox();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemExit = new javax.swing.JMenuItem();
@@ -220,10 +248,9 @@ public abstract class MainWindow extends javax.swing.JFrame {
         panelTestScenarioInit.setLayout(new java.awt.GridLayout(2, 2, 0, 30));
 
         newTestScenarioButton.setBackground(new java.awt.Color(128, 128, 128));
-        newTestScenarioButton.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
         newTestScenarioButton.setIcon(new javax.swing.ImageIcon(ClassLoader.getSystemResource("images/new.png")));
         newTestScenarioButton.setText("Create Test Scenario");
-        newTestScenarioButton.setToolTipText("New");
+        newTestScenarioButton.setToolTipText("Create Test Scenario");
         newTestScenarioButton.setBorderPainted(false);
         newTestScenarioButton.setFocusable(false);
         newTestScenarioButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -240,7 +267,6 @@ public abstract class MainWindow extends javax.swing.JFrame {
         panelTestScenarioInit.add(newTestScenarioButton);
 
         openTestScenarioButton.setBackground(new java.awt.Color(128, 128, 128));
-        openTestScenarioButton.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
         openTestScenarioButton.setIcon(new javax.swing.ImageIcon(ClassLoader.getSystemResource("images/open.png")));
         openTestScenarioButton.setText("Open Test Scenario");
         openTestScenarioButton.setToolTipText("Open");
@@ -261,7 +287,7 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
         panelTestScenario.add(panelTestScenarioInit, "card3");
 
-        panelAlgorithm.setLayout(new java.awt.GridLayout());
+        panelAlgorithm.setLayout(new java.awt.GridLayout(1, 0));
 
         splitPaneAlgorithm.setDividerLocation(150);
         splitPaneAlgorithm.setDividerSize(5);
@@ -286,7 +312,9 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
         panelResults.setLayout(new java.awt.GridLayout(1, 0));
 
-        resultsSplitPane.setDividerLocation(300);
+        resultsSplitPane.setDividerLocation(350);
+
+        jPanel1.setLayout(new java.awt.CardLayout());
 
         resultsDirectoryLabel.setText("Results directory:");
 
@@ -301,70 +329,61 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
         stepResultLabel.setText("Step:");
 
-        createChartResultButton.setText("Create Chart");
-        createChartResultButton.addActionListener(new java.awt.event.ActionListener() {
+        createBoxplotChartButton.setText("Create Chart");
+        createBoxplotChartButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createChartResultButtonActionPerformed(evt);
+                createBoxplotChartButtonActionPerformed(evt);
             }
         });
 
         logarithmicResultCheckBox.setText("Use logarithmic Y axis");
 
-        org.jdesktop.layout.GroupLayout configChartPanelLayout = new org.jdesktop.layout.GroupLayout(configChartPanel);
-        configChartPanel.setLayout(configChartPanelLayout);
-        configChartPanelLayout.setHorizontalGroup(configChartPanelLayout.createParallelGroup(
-                org.jdesktop.layout.GroupLayout.LEADING).add(
-                org.jdesktop.layout.GroupLayout.TRAILING,
-                configChartPanelLayout
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(jPanel4Layout
+                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel4Layout
                         .createSequentialGroup()
-                        .add(configChartPanelLayout
-                                .createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                .add(configChartPanelLayout.createSequentialGroup().addContainerGap()
-                                        .add(createChartResultButton))
-                                .add(configChartPanelLayout
-                                        .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(configChartPanelLayout
-                                                .createSequentialGroup()
-                                                .add(20, 20, 20)
-                                                .add(configChartPanelLayout
-                                                        .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                                        .add(resultsDirectoryLabel)
-                                                        .add(configChartPanelLayout
-                                                                .createSequentialGroup()
-                                                                .add(resultDirectoryTextField,
-                                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-                                                                        165,
-                                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(
-                                                                        org.jdesktop.layout.LayoutStyle.RELATED)
-                                                                .add(resultDirectoryButton))))
-                                        .add(configChartPanelLayout.createSequentialGroup().addContainerGap()
-                                                .add(measurementResultLabel))
-                                        .add(configChartPanelLayout.createSequentialGroup().addContainerGap()
-                                                .add(measurementResultComboBox, 0, 277, Short.MAX_VALUE))
-                                        .add(configChartPanelLayout.createSequentialGroup().addContainerGap()
-                                                .add(stepResultLabel))
-                                        .add(configChartPanelLayout
-                                                .createSequentialGroup()
-                                                .addContainerGap()
-                                                .add(stepResultTextField,
-                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94,
-                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                        .add(configChartPanelLayout
-                                                .createSequentialGroup()
-                                                .addContainerGap()
-                                                .add(logarithmicResultCheckBox,
-                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 265,
-                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap()));
-        configChartPanelLayout.setVerticalGroup(configChartPanelLayout.createParallelGroup(
-                org.jdesktop.layout.GroupLayout.LEADING).add(
-                configChartPanelLayout
+                        .add(jPanel4Layout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                .add(logarithmicResultCheckBox, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jPanel4Layout
+                                        .createSequentialGroup()
+                                        .add(11, 11, 11)
+                                        .add(jPanel4Layout
+                                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                                .add(resultsDirectoryLabel)
+                                                .add(jPanel4Layout
+                                                        .createSequentialGroup()
+                                                        .add(resultDirectoryTextField,
+                                                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 186,
+                                                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                                        .add(resultDirectoryButton))).add(9, 9, 9)))
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(org.jdesktop.layout.GroupLayout.TRAILING,
+                        jPanel4Layout.createSequentialGroup().addContainerGap(192, Short.MAX_VALUE)
+                                .add(createBoxplotChartButton).addContainerGap())
+                .add(jPanel4Layout
                         .createSequentialGroup()
-                        .add(20, 20, 20)
+                        .add(9, 9, 9)
+                        .add(jPanel4Layout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(measurementResultComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 290,
+                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(measurementResultLabel)
+                                .add(stepResultLabel)
+                                .add(stepResultTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94,
+                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(32, Short.MAX_VALUE)));
+        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                jPanel4Layout
+                        .createSequentialGroup()
+                        .addContainerGap()
                         .add(resultsDirectoryLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(configChartPanelLayout
+                        .add(jPanel4Layout
                                 .createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                                 .add(resultDirectoryTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
                                         org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
@@ -382,7 +401,137 @@ public abstract class MainWindow extends javax.swing.JFrame {
                                 org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
                                 org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(18, 18, 18)
                         .add(logarithmicResultCheckBox).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(createChartResultButton).addContainerGap(28, Short.MAX_VALUE)));
+                        .add(createBoxplotChartButton).addContainerGap(27, Short.MAX_VALUE)));
+
+        jPanel1.add(jPanel4, "card2");
+
+        resultFileLabel.setText("Result file:");
+
+        resultFileButton.setText("Browse...");
+        resultFileButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resultFileButtonActionPerformed(evt);
+            }
+        });
+
+        measurementLineResultLabel.setText("Measurement:");
+
+        stepLineResultLabel.setText("Step:");
+
+        createLineChartButton.setText("Create Chart");
+        createLineChartButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createLineChartButtonActionPerformed(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout lineChartPanelLayout = new org.jdesktop.layout.GroupLayout(lineChartPanel);
+        lineChartPanel.setLayout(lineChartPanelLayout);
+        lineChartPanelLayout.setHorizontalGroup(lineChartPanelLayout.createParallelGroup(
+                org.jdesktop.layout.GroupLayout.LEADING).add(
+                lineChartPanelLayout
+                        .createSequentialGroup()
+                        .add(9, 9, 9)
+                        .add(lineChartPanelLayout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(resultFileLabel)
+                                .add(lineChartPanelLayout
+                                        .createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                        .add(lineChartPanelLayout
+                                                .createSequentialGroup()
+                                                .add(resultFileTextField,
+                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 186,
+                                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                                .add(resultFileButton))
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING, measurementLineResultLabel)
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING, stepLineResultLabel)
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING, stepLineResultTextField,
+                                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94,
+                                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(org.jdesktop.layout.GroupLayout.LEADING,
+                                                lineChartPanelLayout
+                                                        .createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                                        .add(createLineChartButton)
+                                                        .add(measurementLineResultComboBox,
+                                                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 290,
+                                                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                        .add(27, 27, 27)));
+        lineChartPanelLayout.setVerticalGroup(lineChartPanelLayout.createParallelGroup(
+                org.jdesktop.layout.GroupLayout.LEADING).add(
+                org.jdesktop.layout.GroupLayout.TRAILING,
+                lineChartPanelLayout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .add(resultFileLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(lineChartPanelLayout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(resultFileTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(resultFileButton))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(measurementLineResultLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(measurementLineResultComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                                org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(stepLineResultLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(stepLineResultTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                                org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(createLineChartButton)
+                        .add(88, 88, 88)));
+
+        jPanel1.add(lineChartPanel, "card3");
+
+        chartTypeLabel.setText("Chart:");
+
+        org.jdesktop.layout.GroupLayout chartTypePanelLayout = new org.jdesktop.layout.GroupLayout(chartTypePanel);
+        chartTypePanel.setLayout(chartTypePanelLayout);
+        chartTypePanelLayout.setHorizontalGroup(chartTypePanelLayout.createParallelGroup(
+                org.jdesktop.layout.GroupLayout.LEADING).add(
+                chartTypePanelLayout.createSequentialGroup().addContainerGap().add(chartTypeLabel).add(11, 11, 11)
+                        .add(chartTypeComboBox, 0, 245, Short.MAX_VALUE).addContainerGap()));
+        chartTypePanelLayout.setVerticalGroup(chartTypePanelLayout.createParallelGroup(
+                org.jdesktop.layout.GroupLayout.LEADING).add(
+                org.jdesktop.layout.GroupLayout.TRAILING,
+                chartTypePanelLayout
+                        .createSequentialGroup()
+                        .addContainerGap(20, Short.MAX_VALUE)
+                        .add(chartTypePanelLayout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(chartTypeComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                        org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(chartTypeLabel))
+                        .addContainerGap()));
+
+        org.jdesktop.layout.GroupLayout configChartPanelLayout = new org.jdesktop.layout.GroupLayout(configChartPanel);
+        configChartPanel.setLayout(configChartPanelLayout);
+        configChartPanelLayout.setHorizontalGroup(configChartPanelLayout.createParallelGroup(
+                org.jdesktop.layout.GroupLayout.LEADING).add(
+                org.jdesktop.layout.GroupLayout.TRAILING,
+                configChartPanelLayout
+                        .createSequentialGroup()
+                        .add(configChartPanelLayout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                .add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                                .add(chartTypePanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                        org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()));
+        configChartPanelLayout.setVerticalGroup(configChartPanelLayout.createParallelGroup(
+                org.jdesktop.layout.GroupLayout.LEADING).add(
+                configChartPanelLayout
+                        .createSequentialGroup()
+                        .add(chartTypePanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+                                org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+                                org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
         resultsSplitPane.setLeftComponent(configChartPanel);
 
@@ -424,13 +573,17 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
     protected abstract void startSimulationToolBarButtonActionPerformed(java.awt.event.ActionEvent evt);
 
-    protected abstract void resultDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt);
-
-    protected abstract void createChartResultButtonActionPerformed(java.awt.event.ActionEvent evt);
+    protected abstract void newTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt);
 
     protected abstract void openTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt);
 
-    protected abstract void newTestScenarioButtonActionPerformed(java.awt.event.ActionEvent evt);
+    protected abstract void resultDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt);
+
+    protected abstract void createBoxplotChartButtonActionPerformed(java.awt.event.ActionEvent evt);
+
+    protected abstract void resultFileButtonActionPerformed(java.awt.event.ActionEvent evt);
+
+    protected abstract void createLineChartButtonActionPerformed(java.awt.event.ActionEvent evt);
 
     /**
      * @param args the command line arguments
