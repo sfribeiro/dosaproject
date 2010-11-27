@@ -132,6 +132,13 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
 		</dependency>
+        
+        <!-- Apache poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.5-FINAL</version>
+        </dependency>
 
 		<!-- JODA -->
 		<dependency>

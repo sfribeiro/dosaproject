@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package br.upe.ecomp.dosa.controller.chart.line;
+package br.upe.ecomp.dosa.controller.resultsanalyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,8 +28,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import br.upe.ecomp.dosa.controller.chart.FileResultsAnalyzer;
-import br.upe.ecomp.dosa.controller.chart.ISimpleDataSet;
 import br.upe.ecomp.doss.core.exception.InfraException;
 
 /**

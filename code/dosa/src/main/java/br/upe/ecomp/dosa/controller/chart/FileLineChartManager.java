@@ -19,13 +19,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package br.upe.ecomp.dosa.controller.chart.line;
+package br.upe.ecomp.dosa.controller.chart;
 
 import java.awt.Color;
 import java.awt.Panel;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.jfree.chart.ChartFactory;
@@ -37,7 +35,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import br.upe.ecomp.dosa.controller.chart.IChartManager;
+import br.upe.ecomp.dosa.controller.resultsanalyzer.FileLineResultsAnalyzer;
 
 /**
  * Plot a line chart.
@@ -101,8 +99,8 @@ public class FileLineChartManager implements IChartManager {
         chart.setBackgroundPaint(Color.white);
 
         final CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setRangeGridlinePaint(Color.white);
+        plot.setBackgroundPaint(Color.white);
+        plot.setRangeGridlinePaint(Color.lightGray);
 
         // customise the range axis...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -114,14 +112,8 @@ public class FileLineChartManager implements IChartManager {
     private CategoryDataset createSampleDataset(double[] values, String measurement) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        ArrayList<Double> list = new ArrayList<Double>();
         for (int i = 0; i < values.length; i++) {
-            list.add(values[i]);
-        }
-        Collections.sort(list);
-        int i = 1;
-        for (Double value : list) {
-            dataset.addValue(value, measurement, "" + i++);
+            dataset.addValue(values[i], measurement, "" + i++);
         }
         return dataset;
     }

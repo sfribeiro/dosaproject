@@ -24,6 +24,7 @@ package br.upe.ecomp.dosa.view.mainwindow;
 import java.awt.CardLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -51,11 +52,12 @@ import javax.swing.tree.TreeModel;
 
 import org.apache.commons.lang.StringUtils;
 
-import br.upe.ecomp.dosa.controller.chart.FileResultsAnalyzer;
+import br.upe.ecomp.dosa.controller.chart.FileBoxplotChartManager;
+import br.upe.ecomp.dosa.controller.chart.FileLineChartManager;
 import br.upe.ecomp.dosa.controller.chart.IChartManager;
-import br.upe.ecomp.dosa.controller.chart.IResultsAnalyzer;
-import br.upe.ecomp.dosa.controller.chart.boxplot.FileBoxplotChartManager;
-import br.upe.ecomp.dosa.controller.chart.line.FileLineChartManager;
+import br.upe.ecomp.dosa.controller.resultsanalyzer.CSVParser;
+import br.upe.ecomp.dosa.controller.resultsanalyzer.FileResultsAnalyzer;
+import br.upe.ecomp.dosa.controller.resultsanalyzer.IResultsAnalyzer;
 import br.upe.ecomp.dosa.view.mainwindow.table.ExtendedTableModel;
 import br.upe.ecomp.dosa.view.mainwindow.tree.ExtendedTreeNode;
 import br.upe.ecomp.dosa.view.mainwindow.tree.TreeNodeTypeEnum;
@@ -241,6 +243,27 @@ public class MainWindowActions extends MainWindow implements WizardListener {
         resultsSplitPane.setRightComponent(panel);
     }
 
+    @Override
+    protected void exportButtonActionPerformed(ActionEvent evt) {
+        String outputDirectory = null;
+        String outputFile = null;
+        String measurement = (String) measurementLineResultComboBox.getSelectedItem();
+        Integer step = Integer.parseInt(stepLineResultTextField.getText());
+
+        FileDialog fileopen = new FileDialog(new Frame(), "Open Results Directory", FileDialog.SAVE);
+        fileopen.setModalityType(ModalityType.DOCUMENT_MODAL);
+        fileopen.setVisible(true);
+
+        if (fileopen.getFile() != null) {
+            outputDirectory = fileopen.getDirectory();
+            outputFile = fileopen.getFile();
+        }
+
+        if (outputDirectory != null && outputFile != null) {
+            new CSVParser().parse(outputDirectory, outputFile, resultFiles, measurement, step);
+        }
+    }
+
     private void initResultsTab() {
         chartTypeComboBox.setModel(new DefaultComboBoxModel());
         chartTypeComboBox.addItem("Boxplot");
@@ -249,13 +272,13 @@ public class MainWindowActions extends MainWindow implements WizardListener {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 if (chartTypeComboBox.getSelectedIndex() == 0) {
-                    ((CardLayout) jPanel1.getLayout()).first(jPanel1);
+                    ((CardLayout) chartPanel.getLayout()).first(chartPanel);
                 } else {
-                    ((CardLayout) jPanel1.getLayout()).last(jPanel1);
+                    ((CardLayout) chartPanel.getLayout()).last(chartPanel);
                 }
             }
         });
-        ((CardLayout) jPanel1.getLayout()).first(jPanel1);
+        ((CardLayout) chartPanel.getLayout()).first(chartPanel);
 
         resultsAnalyzer = new FileResultsAnalyzer();
         // rtManager = new FileBoxplotChartManager();

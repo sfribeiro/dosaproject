@@ -19,26 +19,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package br.upe.ecomp.dosa.controller.chart;
+package br.upe.ecomp.dosa.controller.resultsanalyzer;
 
 import java.io.File;
 import java.util.List;
 
 /**
- * .
+ * Performs some analysis on the results of simulations.
  * 
  * @author Rodrigo Castro
  */
-public interface ICompoundDataSet {
+public interface IResultsAnalyzer {
 
     /**
-     * Gets the data to plot the chart.
+     * Given the list of result files, returns the list of measurements that appears on all files.
      * 
      * @param files The list of file results.
-     * @param measurement The measurement that will be analyzed.
-     * @param lastIteration The biggest iteration that will be tacked into account.
-     * @param step The interval into which the data will be read.
-     * @return The data to plot the chart.
+     * @return The list of measurements that appears on all files.
      */
-    double[][] getData(List<File> files, String measurement, Integer lastIteration, int step);
+    List<String> searchCommonsMeasurements(List<File> files);
+
+    /**
+     * Given the list of result files, returns the biggest iteration that is common to all
+     * simulations.
+     * 
+     * @param files The list of file results.
+     * @return The biggest iteration that is common to all simulations.
+     */
+    Integer getLastIteration(List<File> files);
 }

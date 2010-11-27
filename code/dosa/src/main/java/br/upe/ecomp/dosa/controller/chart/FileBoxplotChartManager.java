@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package br.upe.ecomp.dosa.controller.chart.boxplot;
+package br.upe.ecomp.dosa.controller.chart;
 
 import java.awt.Color;
 import java.awt.Panel;
@@ -41,7 +41,7 @@ import org.jfree.data.statistics.BoxAndWhiskerCalculator;
 import org.jfree.data.statistics.BoxAndWhiskerCategoryDataset;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 
-import br.upe.ecomp.dosa.controller.chart.IChartManager;
+import br.upe.ecomp.dosa.controller.resultsanalyzer.FileBoxPlotResultsAnalyser;
 
 /**
  * Plot a boxplot chart.

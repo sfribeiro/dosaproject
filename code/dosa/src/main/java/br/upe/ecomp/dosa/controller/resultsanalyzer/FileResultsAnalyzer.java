@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package br.upe.ecomp.dosa.controller.chart;
+package br.upe.ecomp.dosa.controller.resultsanalyzer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -113,7 +113,7 @@ public class FileResultsAnalyzer implements IResultsAnalyzer {
      * @param measurementLists The list of lists of measurements.
      * @return The list of measurements that appears on all files.
      */
-    protected List<String> findCommonsMeasurements(List<List<String>> measurementLists) {
+    public List<String> findCommonsMeasurements(List<List<String>> measurementLists) {
         List<String> measurements = new ArrayList<String>();
         boolean common;
         List<String> largestList = getLargestList(measurementLists);

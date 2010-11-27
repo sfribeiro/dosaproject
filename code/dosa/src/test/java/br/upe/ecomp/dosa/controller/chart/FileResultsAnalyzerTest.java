@@ -28,7 +28,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import br.upe.ecomp.dosa.controller.chart.boxplot.FileBoxPlotResultsAnalyser;
+import br.upe.ecomp.dosa.controller.resultsanalyzer.FileBoxPlotResultsAnalyser;
 
 /**
  * Test class for FilePreProcessor.
