@@ -104,6 +104,9 @@ public class FileBoxplotChartManager implements IChartManager {
                 dataset, true);
         final CategoryPlot plot = chart.getCategoryPlot();// new CategoryPlot(dataset, xAxis, yAxis,
                                                           // renderer);
+        plot.setBackgroundPaint(Color.white);
+        // chart.setBackgroundPaint(Color.white);
+        plot.setRangeGridlinePaint(Color.lightGray);
         plot.setRenderer(renderer);
         plot.setRangeAxis(yAxis);
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());

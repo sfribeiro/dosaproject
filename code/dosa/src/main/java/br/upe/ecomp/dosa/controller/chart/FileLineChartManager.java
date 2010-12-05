@@ -67,7 +67,7 @@ public class FileLineChartManager implements IChartManager {
 
         chartPanel.setLayout(new java.awt.GridLayout(1, 1));
 
-        JFreeChart chart = createChart("", "Iterations", "Fitness", createSampleDataset(values, measurement), false);
+        JFreeChart chart = createChart("", "Sample", "Fitness", createSampleDataset(values, measurement), false);
 
         ChartPanel jFreeChartPanel = new ChartPanel(chart);
         chartPanel.add(jFreeChartPanel);

@@ -40,6 +40,7 @@ import br.upe.ecomp.doss.problem.df1.DF1;
 import br.upe.ecomp.doss.problem.movingpeaks.MovingPeaks;
 import br.upe.ecomp.doss.stopCondition.MaximumIterationsStopCondition;
 import br.upe.ecomp.doss.stopCondition.StopCondition;
+import br.upe.ecomp.doss.stopCondition.StopCondition1;
 
 /**
  * Configures the application.
@@ -78,6 +79,7 @@ public final class ApplicationContext {
 
         /* Stop Conditions */
         addStopCondition(MaximumIterationsStopCondition.class);
+        addStopCondition(StopCondition1.class);
 
         /* Measurements */
         addMeasurement(BestFitness.class);

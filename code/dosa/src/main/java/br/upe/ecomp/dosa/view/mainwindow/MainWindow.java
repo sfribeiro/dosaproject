@@ -408,7 +408,7 @@ public abstract class MainWindow extends javax.swing.JFrame {
 
         chartPanel.add(boxplotPanel, "card2");
 
-        resultFileLabel.setText("Result file:");
+        resultFileLabel.setText("Results directory:");
 
         resultFileButton.setText("Browse...");
         resultFileButton.addActionListener(new java.awt.event.ActionListener() {
