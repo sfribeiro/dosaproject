@@ -25,12 +25,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.upe.ecomp.doss.algorithm.Algorithm;
+import br.upe.ecomp.doss.algorithm.apso.GlobalBestAPSO;
+import br.upe.ecomp.doss.algorithm.apso.LocalBestAPSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedClanPSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedGlobalBestPSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedLocalBestPSO;
 import br.upe.ecomp.doss.algorithm.clanpso.ClanPSO;
 import br.upe.ecomp.doss.algorithm.fss.FSS;
 import br.upe.ecomp.doss.algorithm.pso.LocalBestPSO;
+import br.upe.ecomp.doss.algorithm.volitiveapso.GlobalVolitiveAPSO;
+import br.upe.ecomp.doss.algorithm.volitiveapso.LocalVolitiveAPSO;
+import br.upe.ecomp.doss.algorithm.volitivepso.ClanVolitivePSO;
+import br.upe.ecomp.doss.algorithm.volitivepso.GlobalVolitivePSO;
+import br.upe.ecomp.doss.algorithm.volitivepso.LocalVolitivePSO;
 import br.upe.ecomp.doss.measurement.BestFitness;
 import br.upe.ecomp.doss.measurement.MeanFitness;
 import br.upe.ecomp.doss.measurement.Measurement;
@@ -40,7 +47,6 @@ import br.upe.ecomp.doss.problem.df1.DF1;
 import br.upe.ecomp.doss.problem.movingpeaks.MovingPeaks;
 import br.upe.ecomp.doss.stopCondition.MaximumIterationsStopCondition;
 import br.upe.ecomp.doss.stopCondition.StopCondition;
-import br.upe.ecomp.doss.stopCondition.StopCondition1;
 
 /**
  * Configures the application.
@@ -66,11 +72,23 @@ public final class ApplicationContext {
 
         /* Algorithms */
         addAlgorithm(LocalBestPSO.class);
+        addAlgorithm(ClanPSO.class);
+
         addAlgorithm(ChargedGlobalBestPSO.class);
         addAlgorithm(ChargedLocalBestPSO.class);
-        addAlgorithm(ClanPSO.class);
-        addAlgorithm(FSS.class);
         addAlgorithm(ChargedClanPSO.class);
+
+        addAlgorithm(GlobalBestAPSO.class);
+        addAlgorithm(LocalBestAPSO.class);
+
+        addAlgorithm(GlobalVolitivePSO.class);
+        addAlgorithm(LocalVolitivePSO.class);
+        addAlgorithm(ClanVolitivePSO.class);
+
+        addAlgorithm(GlobalVolitiveAPSO.class);
+        addAlgorithm(LocalVolitiveAPSO.class);
+
+        addAlgorithm(FSS.class);
 
         /* Problems */
         addProblem(MovingPeaks.class);
@@ -79,7 +97,6 @@ public final class ApplicationContext {
 
         /* Stop Conditions */
         addStopCondition(MaximumIterationsStopCondition.class);
-        addStopCondition(StopCondition1.class);
 
         /* Measurements */
         addMeasurement(BestFitness.class);

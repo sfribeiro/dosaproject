@@ -40,5 +40,5 @@ public interface ISimpleDataSet {
      * @param step The interval into which the data will be read.
      * @return The data to plot the chart.
      */
-    double[] getData(List<File> file, String measurement, Integer lastIteration, Integer step);
+    double[] getDataMeans(List<File> file, String measurement, Integer lastIteration, Integer step);
 }

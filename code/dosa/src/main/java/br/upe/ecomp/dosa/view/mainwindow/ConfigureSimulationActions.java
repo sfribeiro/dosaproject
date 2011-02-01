@@ -90,7 +90,7 @@ public class ConfigureSimulationActions extends ConfigureSimulation implements R
 
         Runner runner = new Runner(filePath, fileName, simulationsNumber, showSimulation);
         if (!showSimulation) {
-            runner.addLitener(this);
+            runner.addListener(this);
         }
         Thread thread = new Thread(runner);
         thread.start();

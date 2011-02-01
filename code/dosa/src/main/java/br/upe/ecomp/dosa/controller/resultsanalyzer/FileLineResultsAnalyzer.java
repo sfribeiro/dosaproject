@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.List;
 
 import br.upe.ecomp.doss.core.exception.InfraException;
+import br.upe.ecomp.doss.util.Statistics;
 
 /**
  * .
@@ -37,16 +38,18 @@ import br.upe.ecomp.doss.core.exception.InfraException;
  */
 public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISimpleDataSet {
 
+    private double[] standardDeviations;
+
     /**
      * {@inheritDoc}
      */
-    public double[] getData(List<File> files, String measurement, Integer lastIteration, Integer step) {
+    public double[] getDataMeans(List<File> files, String measurement, Integer lastIteration, Integer step) {
         int iterations = lastIteration / step;
 
         // We want to guarantee that the last iteration is always computed.
-        // if (lastIteration % step != 0) {
-        // iterations += 1;
-        // }
+        if (lastIteration % step != 0) {
+            iterations += 1;
+        }
 
         double[][] values = new double[iterations][files.size()];
         for (int i = 0; i < iterations; i++) {
@@ -59,7 +62,22 @@ public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISim
             currentFile++;
         }
 
-        return processValues(values);
+        // Stores the standard deviations
+        standardDeviations = calculateStandardDeviations(values);
+
+        return calculateMeans(values);
+    }
+
+    public double[] getStandardDeviations() {
+        return standardDeviations;
+    }
+
+    private double[] calculateStandardDeviations(double[][] values) {
+        double[] result = new double[values.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = Statistics.getStandardDeviation(values[i]);
+        }
+        return result;
     }
 
     private void readResults(File file, String measurement, Integer lastIteration, double[][] results, int step,
@@ -103,10 +121,12 @@ public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISim
         }
     }
 
-    private double[] processValues(double[][] values) {
+    private double[] calculateMeans(double[][] values) {
         double[] results = new double[values.length];
         double mean;
         for (int i = 0; i < values.length; i++) {
+            // TODO verificar o uso da linha abaixo ao invŽs no <code>for</code>
+            // results[i] = Statistics.getArithmeticAverage(values[i]);
             mean = 0;
             for (int j = 0; j < values[i].length; j++) {
                 mean += values[i][j];

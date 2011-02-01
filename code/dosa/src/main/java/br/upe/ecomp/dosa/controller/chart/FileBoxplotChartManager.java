@@ -65,15 +65,15 @@ public class FileBoxplotChartManager implements IChartManager {
     public Panel plot(List<File> files, String measurement, int step, boolean logarithmicYAxis) {
         Integer lastIteration = resultsAnalyzer.getLastIteration(files);
         double[][] data = resultsAnalyzer.getData(files, measurement, lastIteration, step);
-        return createContents(data, logarithmicYAxis);
+        return createContents(data, logarithmicYAxis, step);
     }
 
-    private Panel createContents(double[][] values, boolean logarithmicYAxis) {
+    private Panel createContents(double[][] values, boolean logarithmicYAxis, int step) {
         Panel chartPanel = new Panel();
 
         chartPanel.setLayout(new java.awt.GridLayout(1, 1));
 
-        JFreeChart chart = createChart("", "Iterations", "Fitness", createSampleDataset(values), logarithmicYAxis);
+        JFreeChart chart = createChart("", "Iterations", "Fitness", createSampleDataset(values, step), logarithmicYAxis);
 
         ChartPanel jFreeChartPanel = new ChartPanel(chart);
         chartPanel.add(jFreeChartPanel);
@@ -113,7 +113,7 @@ public class FileBoxplotChartManager implements IChartManager {
         return chart;
     }
 
-    private BoxAndWhiskerCategoryDataset createSampleDataset(double[][] values) {
+    private BoxAndWhiskerCategoryDataset createSampleDataset(double[][] values, int step) {
 
         DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
         ArrayList<Double> list = null;
@@ -124,7 +124,8 @@ public class FileBoxplotChartManager implements IChartManager {
             }
             Collections.sort(list);
             // dataset.add(list, "Series", " Iteration " + i);
-            dataset.add(BoxAndWhiskerCalculator.calculateBoxAndWhiskerStatistics(list), "Boxplot Evolution chart", i);
+            dataset.add(BoxAndWhiskerCalculator.calculateBoxAndWhiskerStatistics(list), "Boxplot Evolution chart", i
+                    * step);
         }
         return dataset;
     }

@@ -58,16 +58,16 @@ public class FileLineChartManager implements IChartManager {
      */
     public Panel plot(List<File> files, String measurement, int step, boolean logarithmicYAxis) {
         Integer lastIteration = resultsAnalyzer.getLastIteration(files);
-        double[] data = resultsAnalyzer.getData(files, measurement, lastIteration, step);
-        return createContents(data, logarithmicYAxis, measurement);
+        double[] data = resultsAnalyzer.getDataMeans(files, measurement, lastIteration, step);
+        return createContents(data, logarithmicYAxis, measurement, step);
     }
 
-    private Panel createContents(double[] values, boolean logarithmicYAxis, String measurement) {
+    private Panel createContents(double[] values, boolean logarithmicYAxis, String measurement, int step) {
         Panel chartPanel = new Panel();
 
         chartPanel.setLayout(new java.awt.GridLayout(1, 1));
 
-        JFreeChart chart = createChart("", "Sample", "Fitness", createSampleDataset(values, measurement), false);
+        JFreeChart chart = createChart("", "Sample", "Fitness", createSampleDataset(values, measurement, step), false);
 
         ChartPanel jFreeChartPanel = new ChartPanel(chart);
         chartPanel.add(jFreeChartPanel);
@@ -109,11 +109,11 @@ public class FileLineChartManager implements IChartManager {
         return chart;
     }
 
-    private CategoryDataset createSampleDataset(double[] values, String measurement) {
+    private CategoryDataset createSampleDataset(double[] values, String measurement, int step) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < values.length; i++) {
-            dataset.addValue(values[i], measurement, "" + i++);
+            dataset.addValue(values[i], measurement, "" + i * step);
         }
         return dataset;
     }

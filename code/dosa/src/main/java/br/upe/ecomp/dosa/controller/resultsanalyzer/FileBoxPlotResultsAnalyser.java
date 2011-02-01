@@ -44,9 +44,9 @@ public class FileBoxPlotResultsAnalyser extends FileResultsAnalyzer implements I
         int iterations = lastIteration / step;
 
         // We want to guarantee that the last iteration is always computed.
-        // if (lastIteration % step != 0) {
-        // iterations += 1;
-        // }
+        if (lastIteration % step != 0) {
+            iterations += 1;
+        }
 
         double[][] results = new double[iterations][files.size()];
         for (int i = 0; i < iterations; i++) {

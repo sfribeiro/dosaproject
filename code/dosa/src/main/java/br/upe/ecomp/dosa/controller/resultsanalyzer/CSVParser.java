@@ -56,19 +56,22 @@ public class CSVParser {
     private void writeRows(List<File> files, String measurement, int step) {
         createSheet("Results");
 
-        double[] results = resultsAnalyzer.getData(files, measurement, resultsAnalyzer.getLastIteration(files), step);
+        double[] results = resultsAnalyzer.getDataMeans(files, measurement, resultsAnalyzer.getLastIteration(files),
+                step);
+        double[] standardDeviations = resultsAnalyzer.getStandardDeviations();
 
         HSSFRow row;
         int rowNumber = 1;
         for (int i = 0; i < results.length; i++) {
             row = sheet.createRow(rowNumber++);
-            writeCells(row, i, results[i]);
+            writeCells(row, i, results[i], standardDeviations[i]);
         }
     }
 
-    private void writeCells(HSSFRow row, int sample, double fitness) {
+    private void writeCells(HSSFRow row, int sample, double fitness, double standardDeviation) {
         row.createCell(0).setCellValue(sample);
         row.createCell(1).setCellValue(fitness);
+        row.createCell(2).setCellValue(standardDeviation);
     }
 
     private void createSheet(String name) {
@@ -78,5 +81,17 @@ public class CSVParser {
         HSSFRow row = sheet.createRow(0);
         row.createCell(0).setCellValue("Sample");
         row.createCell(1).setCellValue("Fitness");
+        row.createCell(2).setCellValue("Standard Deviation");
+    }
+
+    private void createSheet(String name, String... columnsNames) {
+        this.sheet = csv.createSheet(name);
+
+        // Configures the header.
+        HSSFRow row = sheet.createRow(0);
+        int columnNumber = 0;
+        for (String columnName : columnsNames) {
+            row.createCell(columnNumber++).setCellValue(columnName);
+        }
     }
 }

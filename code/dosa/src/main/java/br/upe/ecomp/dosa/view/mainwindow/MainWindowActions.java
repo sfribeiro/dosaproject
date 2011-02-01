@@ -148,6 +148,7 @@ public class MainWindowActions extends MainWindow implements WizardListener {
 
     @Override
     protected void startSimulationToolBarButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        saveToolBarButtonActionPerformed(evt);
         algorithm.setRecorder(new FileRecorder());
         ConfigureSimulation configureSimulation = new ConfigureSimulationActions(this, algorithm, filePath, fileName);
         configureSimulation.setVisible(true);
