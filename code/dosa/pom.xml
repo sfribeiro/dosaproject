@@ -66,21 +66,7 @@
             <systemPath>${basedir}/src/main/resources/lib/swing-layout-1.0.4.jar</systemPath>
             <scope>system</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jfreechart</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.13</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/lib/jfreechart-1.0.13.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.jcommon</groupId>
-            <artifactId>jcommon-1.0.16</artifactId>
-            <version>1.0.16</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/lib/jcommon-1.0.16.jar</systemPath>
-        </dependency>
-
+        
 		<!-- Additional libraries that are under the local maven repository -->
 		<dependency>
 			<groupId>br.upe.ecomp.doss</groupId>
@@ -193,6 +179,20 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.3</version>
+		</dependency>
+		
+		<!-- JFreechart -->
+		<dependency>
+			<groupId>jfree</groupId>
+		    <artifactId>jfreechart</artifactId>
+		    <version>1.0.13</version>
+    	</dependency>
+    	
+    	<!-- Jcommon -->
+    	<dependency>
+		    <groupId>jfree</groupId>
+		    <artifactId>jcommon</artifactId>
+		    <version>1.0.15</version>
 		</dependency>
 		
 	</dependencies>

@@ -43,8 +43,23 @@ import br.upe.ecomp.doss.measurement.MeanFitness;
 import br.upe.ecomp.doss.measurement.Measurement;
 import br.upe.ecomp.doss.problem.Problem;
 import br.upe.ecomp.doss.problem.RandomPeaks;
+import br.upe.ecomp.doss.problem.ackley.Ackley;
+import br.upe.ecomp.doss.problem.cec.F1;
+import br.upe.ecomp.doss.problem.cec.F10;
+import br.upe.ecomp.doss.problem.cec.F11;
+import br.upe.ecomp.doss.problem.cec.F2;
+import br.upe.ecomp.doss.problem.cec.F20;
+import br.upe.ecomp.doss.problem.cec.F3;
+import br.upe.ecomp.doss.problem.cec.F9;
 import br.upe.ecomp.doss.problem.df1.DF1;
+import br.upe.ecomp.doss.problem.griewank.Griewank;
 import br.upe.ecomp.doss.problem.movingpeaks.MovingPeaks;
+import br.upe.ecomp.doss.problem.penalized.PenalizedP16;
+import br.upe.ecomp.doss.problem.penalized.PenalizedP8;
+import br.upe.ecomp.doss.problem.rastrigin.Rastrigin;
+import br.upe.ecomp.doss.problem.rosenbrock.Rosenbrock;
+import br.upe.ecomp.doss.problem.schwefel.Schwefel12;
+import br.upe.ecomp.doss.problem.schwefel.Schwefel226;
 import br.upe.ecomp.doss.stopCondition.MaximumIterationsStopCondition;
 import br.upe.ecomp.doss.stopCondition.StopCondition;
 
@@ -89,12 +104,44 @@ public final class ApplicationContext {
         addAlgorithm(LocalVolitiveAPSO.class);
 
         addAlgorithm(FSS.class);
+        
+        //addAlgorithm(ABC.class);
 
         /* Problems */
         addProblem(MovingPeaks.class);
         addProblem(DF1.class);
         addProblem(RandomPeaks.class);
+        
+        addProblem(Ackley.class);
+        addProblem(Griewank.class);
+        addProblem(PenalizedP8.class);
+        addProblem(PenalizedP16.class);
+        addProblem(Rastrigin.class);
+        addProblem(Rosenbrock.class);
+        addProblem(Schwefel12.class);
+        addProblem(Schwefel226.class);
 
+        addProblem(F1.class);
+        addProblem(F2.class);
+        addProblem(F3.class);
+        //addProblem(F4.class);
+        //addProblem(F5.class);
+        //addProblem(F6.class);
+        //addProblem(F7.class);
+        //addProblem(F8.class);
+        addProblem(F9.class);
+        addProblem(F10.class);
+        addProblem(F11.class);
+        //addProblem(F12.class);
+        //addProblem(F13.class);
+        //addProblem(F14.class);
+        //addProblem(F15.class);
+        //addProblem(F16.class);
+        //addProblem(F17.class);
+        //addProblem(F18.class);
+        //addProblem(F19.class);
+        addProblem(F20.class);
+        
         /* Stop Conditions */
         addStopCondition(MaximumIterationsStopCondition.class);
 

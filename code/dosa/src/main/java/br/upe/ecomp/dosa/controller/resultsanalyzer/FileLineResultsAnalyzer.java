@@ -125,7 +125,7 @@ public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISim
         double[] results = new double[values.length];
         double mean;
         for (int i = 0; i < values.length; i++) {
-            // TODO verificar o uso da linha abaixo ao invŽs no <code>for</code>
+            // TODO verificar o uso da linha abaixo ao inves no <code>for</code>
             // results[i] = Statistics.getArithmeticAverage(values[i]);
             mean = 0;
             for (int j = 0; j < values[i].length; j++) {
