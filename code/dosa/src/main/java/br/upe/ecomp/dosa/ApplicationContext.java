@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.upe.ecomp.doss.algorithm.Algorithm;
+import br.upe.ecomp.doss.algorithm.abc.ABC;
 import br.upe.ecomp.doss.algorithm.apso.GlobalBestAPSO;
 import br.upe.ecomp.doss.algorithm.apso.LocalBestAPSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedClanPSO;
@@ -41,16 +42,31 @@ import br.upe.ecomp.doss.algorithm.volitivepso.LocalVolitivePSO;
 import br.upe.ecomp.doss.measurement.BestFitness;
 import br.upe.ecomp.doss.measurement.MeanFitness;
 import br.upe.ecomp.doss.measurement.Measurement;
+import br.upe.ecomp.doss.problem.Elliptic;
 import br.upe.ecomp.doss.problem.Problem;
 import br.upe.ecomp.doss.problem.RandomPeaks;
+import br.upe.ecomp.doss.problem.Sphere;
 import br.upe.ecomp.doss.problem.ackley.Ackley;
 import br.upe.ecomp.doss.problem.cec.F1;
+import br.upe.ecomp.doss.problem.cec.F2;
+import br.upe.ecomp.doss.problem.cec.F3;
+import br.upe.ecomp.doss.problem.cec.F4;
+import br.upe.ecomp.doss.problem.cec.F5;
+import br.upe.ecomp.doss.problem.cec.F6;
+import br.upe.ecomp.doss.problem.cec.F7;
+import br.upe.ecomp.doss.problem.cec.F8;
+import br.upe.ecomp.doss.problem.cec.F9;
 import br.upe.ecomp.doss.problem.cec.F10;
 import br.upe.ecomp.doss.problem.cec.F11;
-import br.upe.ecomp.doss.problem.cec.F2;
+import br.upe.ecomp.doss.problem.cec.F12;
+import br.upe.ecomp.doss.problem.cec.F13;
+import br.upe.ecomp.doss.problem.cec.F14;
+import br.upe.ecomp.doss.problem.cec.F15;
+import br.upe.ecomp.doss.problem.cec.F16;
+import br.upe.ecomp.doss.problem.cec.F17;
+import br.upe.ecomp.doss.problem.cec.F18;
+import br.upe.ecomp.doss.problem.cec.F19;
 import br.upe.ecomp.doss.problem.cec.F20;
-import br.upe.ecomp.doss.problem.cec.F3;
-import br.upe.ecomp.doss.problem.cec.F9;
 import br.upe.ecomp.doss.problem.df1.DF1;
 import br.upe.ecomp.doss.problem.griewank.Griewank;
 import br.upe.ecomp.doss.problem.movingpeaks.MovingPeaks;
@@ -105,14 +121,15 @@ public final class ApplicationContext {
 
         addAlgorithm(FSS.class);
         
-        //addAlgorithm(ABC.class);
+        addAlgorithm(ABC.class);
 
         /* Problems */
         addProblem(MovingPeaks.class);
         addProblem(DF1.class);
         addProblem(RandomPeaks.class);
-        
+        // Basic Functions
         addProblem(Ackley.class);
+        addProblem(Elliptic.class);
         addProblem(Griewank.class);
         addProblem(PenalizedP8.class);
         addProblem(PenalizedP16.class);
@@ -120,26 +137,27 @@ public final class ApplicationContext {
         addProblem(Rosenbrock.class);
         addProblem(Schwefel12.class);
         addProblem(Schwefel226.class);
-
+        addProblem(Sphere.class);
+        // Functions for the CEC */
         addProblem(F1.class);
         addProblem(F2.class);
         addProblem(F3.class);
-        //addProblem(F4.class);
-        //addProblem(F5.class);
-        //addProblem(F6.class);
-        //addProblem(F7.class);
-        //addProblem(F8.class);
+        addProblem(F4.class);
+        addProblem(F5.class);
+        addProblem(F6.class);
+        addProblem(F7.class);
+        addProblem(F8.class);
         addProblem(F9.class);
         addProblem(F10.class);
         addProblem(F11.class);
-        //addProblem(F12.class);
-        //addProblem(F13.class);
-        //addProblem(F14.class);
-        //addProblem(F15.class);
-        //addProblem(F16.class);
-        //addProblem(F17.class);
-        //addProblem(F18.class);
-        //addProblem(F19.class);
+        addProblem(F12.class);
+        addProblem(F13.class);
+        addProblem(F14.class);
+        addProblem(F15.class);
+        addProblem(F16.class);
+        addProblem(F17.class);
+        addProblem(F18.class);
+        addProblem(F19.class);
         addProblem(F20.class);
         
         /* Stop Conditions */
