@@ -56,6 +56,7 @@ import br.upe.ecomp.doss.problem.cec.F6;
 import br.upe.ecomp.doss.problem.cec.F7;
 import br.upe.ecomp.doss.problem.cec.F8;
 import br.upe.ecomp.doss.problem.cec.F9;
+import br.upe.ecomp.doss.problem.cec.F4;
 import br.upe.ecomp.doss.problem.cec.F10;
 import br.upe.ecomp.doss.problem.cec.F11;
 import br.upe.ecomp.doss.problem.cec.F12;
