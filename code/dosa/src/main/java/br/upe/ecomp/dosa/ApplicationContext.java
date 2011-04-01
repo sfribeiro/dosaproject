@@ -28,6 +28,7 @@ import br.upe.ecomp.doss.algorithm.Algorithm;
 import br.upe.ecomp.doss.algorithm.abc.ABC;
 import br.upe.ecomp.doss.algorithm.apso.GlobalBestAPSO;
 import br.upe.ecomp.doss.algorithm.apso.LocalBestAPSO;
+import br.upe.ecomp.doss.algorithm.bso.BSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedClanPSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedGlobalBestPSO;
 import br.upe.ecomp.doss.algorithm.chargedpso.ChargedLocalBestPSO;
@@ -134,6 +135,7 @@ public final class ApplicationContext {
         addAlgorithm(FSS.class);
         
         addAlgorithm(ABC.class);
+        addAlgorithm(BSO.class);
 
         /* Problems */
         addProblem(MovingPeaks.class);
