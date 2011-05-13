@@ -36,6 +36,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import br.upe.ecomp.dosa.controller.resultsanalyzer.FileLineResultsAnalyzer;
+import br.upe.ecomp.doss.util.ImageSaver;
 
 /**
  * Plot a line chart.
@@ -59,15 +60,17 @@ public class FileLineChartManager implements IChartManager {
     public Panel plot(List<File> files, String measurement, int step, boolean logarithmicYAxis) {
         Integer lastIteration = resultsAnalyzer.getLastIteration(files);
         double[] data = resultsAnalyzer.getDataMeans(files, measurement, lastIteration, step);
-        return createContents(data, logarithmicYAxis, measurement, step);
+        return createContents(data, logarithmicYAxis, measurement, step, files.get(0));
     }
 
-    private Panel createContents(double[] values, boolean logarithmicYAxis, String measurement, int step) {
+    private Panel createContents(double[] values, boolean logarithmicYAxis, String measurement, int step, File file) {
         Panel chartPanel = new Panel();
 
         chartPanel.setLayout(new java.awt.GridLayout(1, 1));
 
         JFreeChart chart = createChart("", "Sample", "Fitness", createSampleDataset(values, measurement, step), false);
+
+        ImageSaver.saveImage(chart.createBufferedImage(1000, 800), file.getParent(), "graph.png");
 
         ChartPanel jFreeChartPanel = new ChartPanel(chart);
         chartPanel.add(jFreeChartPanel);

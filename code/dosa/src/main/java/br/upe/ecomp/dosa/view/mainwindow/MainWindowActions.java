@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
@@ -201,27 +202,41 @@ public class MainWindowActions extends MainWindow implements WizardListener {
     }
 
     private boolean chooseDirectory(JTextField textField) {
+        JFileChooser fileOpen = new JFileChooser();
+        fileOpen.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fileOpen.showOpenDialog(this);
+
         boolean directoryChoosed = false;
-        FileDialog fileopen = new FileDialog(this, "Open Results Directory", FileDialog.LOAD);
-        fileopen.setModalityType(ModalityType.DOCUMENT_MODAL);
 
-        System.setProperty("apple.awt.fileDialogForDirectories", "true");
-        fileopen.setVisible(true);
-        System.setProperty("apple.awt.fileDialogForDirectories", "false");
-
-        if (fileopen.getFile() != null) {
-            File directory = new File(fileopen.getDirectory(), fileopen.getFile());
+        if (fileOpen.getSelectedFile() != null) {
+            File directory = new File(fileOpen.getSelectedFile().getAbsolutePath());
             textField.setText(directory.getPath());
 
             resultFiles = getFilesOnDirectory(directory);
-            // List<File> foundFiles = ;
-            // for (File file : foundFiles) {
-            // if (file.getName().endsWith(".txt")) {
-            // resultFiles.add(file);
-            // }
-            // }
             directoryChoosed = true;
         }
+
+        // Codigo para Mac OSX
+        // FileDialog fileopen = new FileDialog(this, "Open Results Directory", FileDialog.LOAD);
+        // fileopen.setModalityType(ModalityType.DOCUMENT_MODAL);
+        //
+        // System.setProperty("apple.awt.fileDialogForDirectories", "true");
+        // fileopen.setVisible(true);
+        // System.setProperty("apple.awt.fileDialogForDirectories", "false");
+        //
+        // if (fileopen.getFile() != null) {
+        // File directory = new File(fileopen.getDirectory(), fileopen.getFile());
+        // textField.setText(directory.getPath());
+        //
+        // resultFiles = getFilesOnDirectory(directory);
+        // // List<File> foundFiles = ;
+        // // for (File file : foundFiles) {
+        // // if (file.getName().endsWith(".txt")) {
+        // // resultFiles.add(file);
+        // // }
+        // // }
+        // directoryChoosed = true;
+        // }
         return directoryChoosed;
     }
 

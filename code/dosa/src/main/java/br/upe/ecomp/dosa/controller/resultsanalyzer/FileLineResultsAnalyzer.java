@@ -84,6 +84,7 @@ public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISim
             int currentFile) {
         BufferedReader reader = null;
         String measurementValue = null;
+        String iterationsValue = null;
         String line = null;
         String measurementLine = measurement + ":";
         try {
@@ -91,12 +92,16 @@ public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISim
             int i = 0;
             int iteration = 0;
             while ((line = reader.readLine()) != null) {
+                if (line.startsWith(ITERATIONS)) {
+                    iterationsValue = line.split(SPACE_TOKEN)[1].trim();
+                    iteration = Integer.parseInt(iterationsValue);
+                }
                 if (line.startsWith(measurementLine)) {
                     measurementValue = line.split(RESULT_TOKEN)[1].trim();
-                    if (iteration % step == 0) {
+                    if (iteration == 1 || iteration % step == 0) {
                         results[i++][currentFile] = Double.parseDouble(measurementValue);
                     }
-                    iteration += 1;
+                    // iteration += 1;
                 }
             }
 
@@ -125,7 +130,7 @@ public class FileLineResultsAnalyzer extends FileResultsAnalyzer implements ISim
         double[] results = new double[values.length];
         double mean;
         for (int i = 0; i < values.length; i++) {
-            // TODO verificar o uso da linha abaixo ao inves no <code>for</code>
+            // TODO verificar o uso da linha abaixo ao invés no <code>for</code>
             // results[i] = Statistics.getArithmeticAverage(values[i]);
             mean = 0;
             for (int j = 0; j < values[i].length; j++) {

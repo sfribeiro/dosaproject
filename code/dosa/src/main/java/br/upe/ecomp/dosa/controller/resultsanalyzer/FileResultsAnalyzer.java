@@ -44,6 +44,8 @@ public class FileResultsAnalyzer implements IResultsAnalyzer {
 
     private static final String MEASUREMENTS = "Measurements:";
     protected static final String RESULT_TOKEN = ":";
+    protected static final String ITERATIONS = "Iteration ";
+    protected static final String SPACE_TOKEN = " ";
 
     /**
      * {@inheritDoc}
